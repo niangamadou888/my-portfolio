@@ -1,39 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 export const CustomCursor = () => {
-  const cursorX = useMotionValue(-200);
-  const cursorY = useMotionValue(-200);
-  const [isPointer, setIsPointer] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  const springCfg = { damping: 28, stiffness: 300, mass: 0.5 };
-  const ringX = useSpring(cursorX, springCfg);
-  const ringY = useSpring(cursorY, springCfg);
-
-  const isPointerRef = useRef(false);
-  const isVisibleRef = useRef(false);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+  // Track state in a ref to avoid React re-renders on every mousemove
+  const stateRef = useRef({ pointer: false, visible: false });
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
+    const ring = ringRef.current;
+    const dot = dotRef.current;
+    if (!ring || !dot) return;
 
-      if (!isVisibleRef.current) {
-        isVisibleRef.current = true;
-        setIsVisible(true);
-      }
-
-      const target = e.target as Element;
-      const clickable = !!target.closest('a, button, [role="button"], input, textarea, select, label, [tabindex]');
-      if (clickable !== isPointerRef.current) {
-        isPointerRef.current = clickable;
-        setIsPointer(clickable);
-      }
+    const applyState = () => {
+      const { pointer, visible } = stateRef.current;
+      ring.style.opacity = visible ? '1' : '0';
+      ring.style.scale = pointer ? '1.6' : '1';
+      dot.style.opacity = visible && !pointer ? '1' : '0';
     };
 
-    const onLeave = () => { isVisibleRef.current = false; setIsVisible(false); };
-    const onEnter = () => { isVisibleRef.current = true; setIsVisible(true); };
+    const onMove = (e: MouseEvent) => {
+      const { clientX: x, clientY: y } = e;
+      // Dot follows cursor instantly
+      dot.style.transform = `translate(${x}px,${y}px)`;
+      // Ring follows with a CSS transition lag (spring-like)
+      ring.style.transform = `translate(${x}px,${y}px)`;
+
+      const wasVisible = stateRef.current.visible;
+      stateRef.current.visible = true;
+
+      const clickable = !!(e.target as Element).closest(
+        'a,button,[role="button"],input,textarea,select,label,[tabindex]'
+      );
+      const changed = clickable !== stateRef.current.pointer || !wasVisible;
+      stateRef.current.pointer = clickable;
+      if (changed) applyState();
+    };
+
+    const onLeave = () => { stateRef.current.visible = false; applyState(); };
+    const onEnter = () => { stateRef.current.visible = true; applyState(); };
 
     window.addEventListener('mousemove', onMove, { passive: true });
     document.documentElement.addEventListener('mouseleave', onLeave);
@@ -48,57 +52,46 @@ export const CustomCursor = () => {
 
   return (
     <>
-      {/* Outer ring - follows with spring */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999]"
+      {/* Ring — CSS transition gives spring-like lag */}
+      <div
+        ref={ringRef}
         style={{
-          x: ringX,
-          y: ringY,
-          translateX: '-50%',
-          translateY: '-50%',
+          position: 'fixed',
+          top: -16,
+          left: -16,
+          pointerEvents: 'none',
+          zIndex: 9999,
+          width: 32,
+          height: 32,
+          borderRadius: '50%',
+          border: '1.5px solid rgba(214, 201, 182, 0.6)',
+          boxShadow: '0 0 10px rgba(214, 201, 182, 0.2)',
+          opacity: 0,
+          transform: 'translate(-200px,-200px)',
+          transition: 'opacity 0.2s, scale 0.2s, transform 110ms ease-out',
+          willChange: 'transform',
         }}
-        animate={{
-          scale: isPointer ? 1.6 : 1,
-          opacity: isVisible ? 1 : 0,
-        }}
-        transition={{ duration: 0.2 }}
-      >
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: '50%',
-            border: '1.5px solid rgba(214, 201, 182, 0.6)',
-            boxShadow: '0 0 10px rgba(214, 201, 182, 0.2)',
-          }}
-        />
-      </motion.div>
-
-      {/* Inner dot - follows directly */}
-      <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999]"
+      />
+      {/* Dot — follows cursor directly, no transition on transform */}
+      <div
+        ref={dotRef}
         style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: '-50%',
-          translateY: '-50%',
+          position: 'fixed',
+          top: -2.5,
+          left: -2.5,
+          pointerEvents: 'none',
+          zIndex: 9999,
+          width: 5,
+          height: 5,
+          borderRadius: '50%',
+          background: 'rgba(214, 201, 182, 0.9)',
+          boxShadow: '0 0 6px rgba(214, 201, 182, 0.5)',
+          opacity: 0,
+          transform: 'translate(-200px,-200px)',
+          transition: 'opacity 0.15s',
+          willChange: 'transform',
         }}
-        animate={{
-          scale: isPointer ? 0 : 1,
-          opacity: isVisible ? 1 : 0,
-        }}
-        transition={{ duration: 0.15 }}
-      >
-        <div
-          style={{
-            width: 5,
-            height: 5,
-            borderRadius: '50%',
-            background: 'rgba(214, 201, 182, 0.9)',
-            boxShadow: '0 0 6px rgba(214, 201, 182, 0.5)',
-          }}
-        />
-      </motion.div>
+      />
     </>
   );
 };

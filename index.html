@@ -34,10 +34,9 @@
     <meta name="twitter:description" content="Portfolio of Amadou Boubacar Niang, a full-stack and mobile developer specializing in React, TypeScript, Next.js, and game development." />
     <meta name="twitter:image" content="https://amadouniang.dev/og-image.png" />
 
-    <!-- Preconnect for Google Fonts (eliminates render-blocking font request) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+    <!-- Preload heading font (Space Grotesk) for fast LCP — self-hosted, no external request -->
+    <link rel="preload" as="font" type="font/woff2"
+          href="/fonts/space-grotesk-latin-wght-normal.woff2" crossorigin />
 
     <!-- hreflang for bilingual content -->
     <link rel="alternate" hreflang="en" href="https://amadouniang.dev/" />
@@ -74,6 +73,20 @@
   </head>
 
   <body>
+    <!-- Static hero shell — paints the LCP h1 immediately before JS loads.
+         React removes this overlay after its first render so the real UI takes over.
+         Inline styles mirror Hero.tsx exactly: same font, size, colors, gradient. -->
+    <style>
+      #__hshell{position:fixed;inset:0;background:#323c48;display:flex;align-items:center;justify-content:center;text-align:center;z-index:9999;font-family:'Space Grotesk',Inter,system-ui,sans-serif}
+      #__hshell h1{font-size:3rem;font-weight:700;line-height:1.25;letter-spacing:-0.025em;margin:0;color:#fff}
+      #__hshell .g{background:linear-gradient(135deg,#d6c9b6 0%,#b8a898 50%,#d6c9b6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+      @media(min-width:640px){#__hshell h1{font-size:3.75rem}}
+      @media(min-width:768px){#__hshell h1{font-size:6rem}}
+    </style>
+    <div id="__hshell" aria-hidden="true">
+      <h1><span>Amadou</span><br><span class="g">Boubacar Niang</span></h1>
+    </div>
+
     <div id="root"></div>
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module" defer></script>
     <script type="module" src="/src/main.tsx"></script>

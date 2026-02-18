@@ -1,14 +1,9 @@
-import { motion } from "framer-motion";
-
 export const Logo = () => {
   return (
-    <motion.a
+    <a
       href="#home"
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
       className="fixed top-6 left-6 z-50 group"
-      style={{ cursor: 'none' }}
+      style={{ cursor: 'none', animation: 'fadeInLeft 0.6s ease 0.2s both' }}
     >
       <div className="relative">
         <span
@@ -29,6 +24,6 @@ export const Logo = () => {
           style={{ background: 'linear-gradient(135deg, #d6c9b6, #b8a898)', zIndex: -1 }}
         />
       </div>
-    </motion.a>
+    </a>
   );
 };

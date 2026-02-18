@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { GithubIcon, LinkedinIcon, MailIcon, FileDown, ArrowDown } from "lucide-react";
 import { toast } from "./ui/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -86,12 +85,7 @@ export const Hero = () => {
 
       <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Greeting chip */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center"
-        >
+        <div className="flex justify-center" style={{ animation: 'fadeInUp 0.6s ease 0.2s both' }}>
           <span
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium"
             style={{
@@ -103,7 +97,7 @@ export const Hero = () => {
             <span className="w-1.5 h-1.5 rounded-full animate-pulse-glow" style={{ background: '#d6c9b6' }} />
             {language === 'fr' ? 'Disponible pour de nouveaux projets' : 'Available for new projects'}
           </span>
-        </motion.div>
+        </div>
 
         {/* Main heading — rendered immediately, no JS animation delay (critical for LCP) */}
         <div>
@@ -118,33 +112,25 @@ export const Hero = () => {
         </div>
 
         {/* Typing role */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+        <div
           className="text-2xl sm:text-3xl font-medium"
-          style={{ minHeight: '2.5rem' }}
+          style={{ minHeight: '2.5rem', animation: 'fadeIn 0.6s ease 0.7s both' }}
         >
           <TypingRole />
-        </motion.div>
+        </div>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
+        <p
           className="text-base sm:text-lg max-w-lg mx-auto leading-relaxed"
-          style={{ color: 'rgba(255,255,255,0.5)' }}
+          style={{ color: 'rgba(255,255,255,0.5)', animation: 'fadeInUp 0.6s ease 0.9s both' }}
         >
           {t('hero.subtitle')}
-        </motion.p>
+        </p>
 
         {/* CTA buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
+        <div
           className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          style={{ animation: 'fadeInUp 0.6s ease 1.1s both' }}
         >
           <button
             onClick={() => handleDownload('en')}
@@ -172,14 +158,12 @@ export const Hero = () => {
             <FileDown className="w-4 h-4" />
             {t('hero.download.fr')}
           </button>
-        </motion.div>
+        </div>
 
         {/* Social links */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
+        <div
           className="flex gap-5 justify-center pt-2"
+          style={{ animation: 'fadeInUp 0.6s ease 1.3s both' }}
         >
           {socials.map((s) => (
             <a
@@ -213,25 +197,19 @@ export const Hero = () => {
               </div>
             </a>
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 2 }}
+      <div
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{ color: 'rgba(255,255,255,0.3)' }}
+        style={{ color: 'rgba(255,255,255,0.3)', animation: 'fadeIn 0.6s ease 2s both' }}
       >
         <span className="text-xs tracking-widest uppercase">Scroll</span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
+        <div style={{ animation: 'bounceMini 1.5s ease-in-out infinite' }}>
           <ArrowDown className="w-4 h-4" />
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </section>
   );
 };

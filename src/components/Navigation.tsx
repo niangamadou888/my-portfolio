@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -27,29 +26,23 @@ export const Navigation = () => {
     const update = () => {
       rafId = null;
       setScrolled(window.scrollY > 40);
-
-      // Compute positions once per rAF frame — batch getBoundingClientRect calls
-      // so lazy-loaded sections are always found once they're in the DOM.
       const threshold = window.innerHeight * 0.4;
       let current = sectionIds[0];
       for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (!el) continue;
-        // Section becomes active when its top crosses the upper 40% of the viewport
-        if (el.getBoundingClientRect().top <= threshold) {
-          current = id;
-        }
+        if (el.getBoundingClientRect().top <= threshold) current = id;
       }
       setActiveSection(current);
     };
 
     const handleScroll = () => {
-      if (rafId !== null) return; // already queued
+      if (rafId !== null) return;
       rafId = requestAnimationFrame(update);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    update(); // run once on mount
+    update();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -60,18 +53,16 @@ export const Navigation = () => {
   return (
     <>
       {/* ── Desktop top bar ── */}
-      <motion.nav
+      <nav
         aria-label="Main navigation"
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 0.3 }}
         className="hidden md:flex fixed top-0 left-0 right-0 z-40 justify-center pt-5"
+        style={{ animation: 'fadeInDown 0.7s ease 0.3s both' }}
       >
         <div
           className={cn(
             "flex items-center gap-1 px-4 py-2 rounded-full transition-all duration-500",
             scrolled
-              ? "bg-black/40 backdrop-blur-xl border border-white/08"
+              ? "bg-black/40 backdrop-blur-xl"
               : "bg-transparent"
           )}
           style={{ border: scrolled ? '1px solid rgba(255,255,255,0.07)' : 'none' }}
@@ -91,14 +82,13 @@ export const Navigation = () => {
                 style={{ cursor: 'none' }}
               >
                 {isActive && (
-                  <motion.span
-                    layoutId="nav-active"
+                  <span
                     className="absolute inset-0 rounded-full"
                     style={{
                       background: 'rgba(214, 201, 182, 0.1)',
                       border: '1px solid rgba(214, 201, 182, 0.25)',
+                      transition: 'opacity 0.3s ease',
                     }}
-                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                   />
                 )}
                 <span className="relative z-10">{item.name}</span>
@@ -106,14 +96,12 @@ export const Navigation = () => {
             );
           })}
         </div>
-      </motion.nav>
+      </nav>
 
       {/* ── Desktop side dots ── */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.8 }}
+      <div
         className="hidden md:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col items-end gap-3"
+        style={{ animation: 'fadeInRight 0.6s ease 0.8s both' }}
       >
         {menuItems.map((item) => {
           const isActive = activeSection === item.id;
@@ -133,7 +121,6 @@ export const Navigation = () => {
               >
                 {item.name}
               </span>
-              {/* Fixed wrapper keeps dot position stable regardless of its size */}
               <span className="flex items-center justify-center w-3 h-3 flex-shrink-0">
                 <span
                   className={cn(
@@ -148,7 +135,7 @@ export const Navigation = () => {
             </a>
           );
         })}
-      </motion.div>
+      </div>
 
       {/* ── Mobile hamburger button ── */}
       <button
@@ -162,71 +149,72 @@ export const Navigation = () => {
         aria-label={isOpen ? "Close menu" : "Open menu"}
         aria-expanded={isOpen}
       >
-        <AnimatePresence mode="wait">
-          {isOpen ? (
-            <motion.span
-              key="close"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <X className="h-5 w-5 text-white" />
-            </motion.span>
-          ) : (
-            <motion.span
-              key="open"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Menu className="h-5 w-5 text-white" />
-            </motion.span>
-          )}
-        </AnimatePresence>
+        {/* Menu / X icons — CSS crossfade */}
+        <span
+          style={{
+            display: 'inline-flex',
+            position: 'absolute',
+            transition: 'transform 0.2s, opacity 0.2s',
+            transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+            opacity: isOpen ? 0 : 1,
+          }}
+        >
+          <Menu className="h-5 w-5 text-white" />
+        </span>
+        <span
+          style={{
+            display: 'inline-flex',
+            position: 'absolute',
+            transition: 'transform 0.2s, opacity 0.2s',
+            transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)',
+            opacity: isOpen ? 1 : 0,
+          }}
+        >
+          <X className="h-5 w-5 text-white" />
+        </span>
       </button>
 
-      {/* ── Mobile full-screen menu ── */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id="mobile-nav"
-            role="dialog"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0, clipPath: "circle(0% at calc(100% - 2.5rem) 2.5rem)" }}
-            animate={{ opacity: 1, clipPath: "circle(150% at calc(100% - 2.5rem) 2.5rem)" }}
-            exit={{ opacity: 0, clipPath: "circle(0% at calc(100% - 2.5rem) 2.5rem)" }}
-            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed inset-0 z-40 md:hidden"
-            style={{ background: 'rgba(3, 3, 8, 0.97)', backdropFilter: 'blur(20px)' }}
-          >
-            <div className="flex items-center justify-center h-full">
-              <nav className="flex flex-col items-center gap-8">
-                {menuItems.map((item, i) => (
-                  <motion.a
-                    key={item.id}
-                    href={item.href}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.07 }}
-                    onClick={() => setIsOpen(false)}
-                    style={{ cursor: 'none' }}
-                    className={cn(
-                      "text-2xl font-semibold tracking-wide transition-colors duration-200",
-                      activeSection === item.id
-                        ? "gradient-text"
-                        : "text-white/50 hover:text-white/90"
-                    )}
-                  >
-                    {item.name}
-                  </motion.a>
-                ))}
-              </nav>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── Mobile full-screen menu ── CSS clip-path transition */}
+      <div
+        id="mobile-nav"
+        role="dialog"
+        aria-label="Mobile navigation"
+        className="fixed inset-0 z-40 md:hidden"
+        style={{
+          background: 'rgba(3, 3, 8, 0.97)',
+          backdropFilter: 'blur(20px)',
+          opacity: isOpen ? 1 : 0,
+          clipPath: isOpen
+            ? 'circle(150% at calc(100% - 2.5rem) 2.5rem)'
+            : 'circle(0% at calc(100% - 2.5rem) 2.5rem)',
+          transition: 'opacity 0.5s, clip-path 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          pointerEvents: isOpen ? 'auto' : 'none',
+        }}
+      >
+        <div className="flex items-center justify-center h-full">
+          <nav className="flex flex-col items-center gap-8">
+            {menuItems.map((item, i) => (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                style={{
+                  cursor: 'none',
+                  animation: isOpen ? `fadeInUp 0.4s ease ${0.1 + i * 0.07}s both` : 'none',
+                }}
+                className={cn(
+                  "text-2xl font-semibold tracking-wide transition-colors duration-200",
+                  activeSection === item.id
+                    ? "gradient-text"
+                    : "text-white/50 hover:text-white/90"
+                )}
+              >
+                {item.name}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </div>
     </>
   );
 };
