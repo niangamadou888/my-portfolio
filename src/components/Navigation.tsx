@@ -26,7 +26,11 @@ export const Navigation = () => {
 
     const updateOffsets = () => {
       cachedOffsets = sectionIds
-        .map(id => ({ id, top: document.getElementById(id)?.offsetTop ?? -1 }))
+        .map(id => {
+          const el = document.getElementById(id);
+          if (!el) return { id, top: -1 };
+          return { id, top: el.getBoundingClientRect().top + window.scrollY };
+        })
         .filter(s => s.top >= 0);
     };
     updateOffsets();
