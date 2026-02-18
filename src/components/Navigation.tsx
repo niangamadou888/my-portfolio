@@ -21,24 +21,34 @@ export const Navigation = () => {
   ];
 
   useEffect(() => {
+    const sectionIds = ["home", "about", "experience", "education", "certifications", "projects", "contact"];
+    let cachedOffsets: { id: string; top: number }[] = [];
+
+    const updateOffsets = () => {
+      cachedOffsets = sectionIds
+        .map(id => ({ id, top: document.getElementById(id)?.offsetTop ?? -1 }))
+        .filter(s => s.top >= 0);
+    };
+    updateOffsets();
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 40);
-
-      const sections = menuItems.map(item => item.id);
       const scrollPos = window.scrollY + window.innerHeight / 3;
-
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i]);
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(sections[i]);
+      for (let i = cachedOffsets.length - 1; i >= 0; i--) {
+        if (cachedOffsets[i].top <= scrollPos) {
+          setActiveSection(cachedOffsets[i].id);
           break;
         }
       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", updateOffsets, { passive: true });
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", updateOffsets);
+    };
   }, []);
 
   return (

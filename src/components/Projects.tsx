@@ -228,6 +228,8 @@ export const Projects = () => {
                       <img
                         src={project.image}
                         alt={project.title}
+                        loading="lazy"
+                        decoding="async"
                         className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                       />
                     )}

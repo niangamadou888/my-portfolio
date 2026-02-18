@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+const FRAME_INTERVAL = 1000 / 30; // cap at 30 fps
+
 const VERTEX_SHADER = `
   attribute vec4 a_position;
   void main() {
@@ -107,20 +109,36 @@ export const ShaderBackground = () => {
     window.addEventListener('mousemove', handleMouse);
 
     const startTime = Date.now();
-    const render = () => {
+    let lastFrameTime = 0;
+
+    const render = (timestamp: number) => {
+      animRef.current = requestAnimationFrame(render);
+      if (timestamp - lastFrameTime < FRAME_INTERVAL) return;
+      lastFrameTime = timestamp;
+
       const elapsed = (Date.now() - startTime) / 1000;
       gl.uniform1f(uTime, elapsed);
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform2f(uMouse, mouseRef.current.x, mouseRef.current.y);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      animRef.current = requestAnimationFrame(render);
     };
-    render();
+    animRef.current = requestAnimationFrame(render);
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animRef.current);
+      } else {
+        lastFrameTime = 0;
+        animRef.current = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMouse);
+      document.removeEventListener('visibilitychange', handleVisibility);
       gl.deleteProgram(program);
     };
   }, []);

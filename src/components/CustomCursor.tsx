@@ -11,27 +11,31 @@ export const CustomCursor = () => {
   const ringX = useSpring(cursorX, springCfg);
   const ringY = useSpring(cursorY, springCfg);
 
-  const rawX = useRef(-200);
-  const rawY = useRef(-200);
+  const isPointerRef = useRef(false);
+  const isVisibleRef = useRef(false);
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      rawX.current = e.clientX;
-      rawY.current = e.clientY;
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
 
-      if (!isVisible) setIsVisible(true);
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
 
       const target = e.target as Element;
-      const clickable = target.closest('a, button, [role="button"], input, textarea, select, label, [tabindex]');
-      setIsPointer(!!clickable);
+      const clickable = !!target.closest('a, button, [role="button"], input, textarea, select, label, [tabindex]');
+      if (clickable !== isPointerRef.current) {
+        isPointerRef.current = clickable;
+        setIsPointer(clickable);
+      }
     };
 
-    const onLeave = () => setIsVisible(false);
-    const onEnter = () => setIsVisible(true);
+    const onLeave = () => { isVisibleRef.current = false; setIsVisible(false); };
+    const onEnter = () => { isVisibleRef.current = true; setIsVisible(true); };
 
-    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mousemove', onMove, { passive: true });
     document.documentElement.addEventListener('mouseleave', onLeave);
     document.documentElement.addEventListener('mouseenter', onEnter);
 
@@ -40,7 +44,7 @@ export const CustomCursor = () => {
       document.documentElement.removeEventListener('mouseleave', onLeave);
       document.documentElement.removeEventListener('mouseenter', onEnter);
     };
-  }, [isVisible]);
+  }, []);
 
   return (
     <>

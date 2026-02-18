@@ -6,10 +6,12 @@ interface TechItemProps {
 function TechItem({ name, icon }: TechItemProps) {
   return (
     <div className="flex items-center gap-2 px-3 py-2 bg-secondary/50 rounded-full text-sm group hover:bg-primary/10 transition-all duration-300">
-      <img 
-        src={icon} 
-        alt={name} 
-        className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" 
+      <img
+        src={icon}
+        alt={name}
+        loading="lazy"
+        decoding="async"
+        className="w-5 h-5 group-hover:scale-110 transition-transform duration-300"
       />
       <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300">
         {name}
