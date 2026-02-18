@@ -1,10 +1,10 @@
-import { Card } from "./ui/card";
-import { GraduationCapIcon, CalendarIcon, MapPinIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { GraduationCapIcon, CalendarIcon, MapPinIcon, CheckCircleIcon } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export const Education = () => {
   const { t, language } = useLanguage();
+
   const education = [
     {
       degree:
@@ -19,16 +19,11 @@ export const Education = () => {
           ? "Études avancées en ingénierie logicielle, axées sur les pratiques et méthodologies modernes de développement."
           : "Advanced studies in Software Engineering, focusing on modern software development practices and methodologies.",
       achievements: [
-        language === 'fr'
-          ? "Spécialisation en architectures logicielles avancées"
-          : "Specializing in advanced software architecture",
-        language === 'fr'
-          ? "Focus sur le développement d'applications d'entreprise"
-          : "Focus on enterprise-level application development",
-        language === 'fr'
-          ? "Recherche en pratiques modernes d'ingénierie logicielle"
-          : "Research in modern software engineering practices",
-      ]
+        language === 'fr' ? "Spécialisation en architectures logicielles avancées" : "Specializing in advanced software architecture",
+        language === 'fr' ? "Focus sur le développement d'applications d'entreprise" : "Focus on enterprise-level application development",
+        language === 'fr' ? "Recherche en pratiques modernes d'ingénierie logicielle" : "Research in modern software engineering practices",
+      ],
+      accent: '#d6c9b6',
     },
     {
       degree:
@@ -43,22 +38,18 @@ export const Education = () => {
           ? "Études approfondies du développement logiciel sur les plateformes web, mobile et jeux."
           : "Comprehensive study of software development across web, mobile, and gaming platforms.",
       achievements: [
-        language === 'fr'
-          ? "Expertise en développement web full-stack"
-          : "Full-stack web development expertise",
-        language === 'fr'
-          ? "Développement d'applications mobiles pour iOS et Android"
-          : "Mobile application development for iOS and Android",
-        language === 'fr'
-          ? "Développement de jeux et médias interactifs"
-          : "Game development and interactive media",
-        language === 'fr'
-          ? "Apprentissage par projets avec des applications réelles"
-          : "Project-based learning with real-world applications",
-      ]
+        language === 'fr' ? "Expertise en développement web full-stack" : "Full-stack web development expertise",
+        language === 'fr' ? "Développement d'applications mobiles pour iOS et Android" : "Mobile application development for iOS and Android",
+        language === 'fr' ? "Développement de jeux et médias interactifs" : "Game development and interactive media",
+        language === 'fr' ? "Apprentissage par projets avec des applications réelles" : "Project-based learning with real-world applications",
+      ],
+      accent: '#d6c9b6',
     },
     {
-      degree: language === 'fr' ? "Baccalauréat en Science et Technique de l'Économie et de la Gestion" : "High School Diploma in Science and Technique of Economics and Management",
+      degree:
+        language === 'fr'
+          ? "Baccalauréat en Science et Technique de l'Économie et de la Gestion"
+          : "High School Diploma in Science and Technique of Economics and Management",
       school: "Lycée Technique André Peytavin",
       location: language === 'fr' ? "Saint-Louis, Sénégal" : "Saint-Louis, Senegal",
       period: "2019",
@@ -67,80 +58,97 @@ export const Education = () => {
           ? "Formation complète en sciences et techniques de l'économie et de la gestion."
           : "Comprehensive training in science and technique of economics and management.",
       achievements: [
-        language === 'fr'
-          ? "Solides bases en économie et gestion"
-          : "Strong foundation in economics and management principles",
-        language === 'fr'
-          ? "Formation technique aux applications métiers"
-          : "Technical training in business applications",
-        language === 'fr'
-          ? "Développement des compétences analytiques et de résolution de problèmes"
-          : "Development of analytical and problem-solving skills",
-      ]
-    }
+        language === 'fr' ? "Solides bases en économie et gestion" : "Strong foundation in economics and management",
+        language === 'fr' ? "Formation technique aux applications métiers" : "Technical training in business applications",
+        language === 'fr' ? "Développement des compétences analytiques" : "Development of analytical and problem-solving skills",
+      ],
+      accent: '#d6c9b6',
+    },
   ];
 
   return (
-    <section id="education" className="py-20 px-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/95 to-background/90" />
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,rgba(var(--primary-rgb),0.08)_0%,transparent_60%)]" />
-        <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_bottom_left,rgba(147,51,234,0.08)_0%,transparent_60%)]" />
-      </div>
+    <section id="education" className="section-container">
+      <span className="section-num" aria-hidden="true">03</span>
 
-      <div className="max-w-6xl mx-auto relative">
-        <div className="flex items-center gap-3 mb-12">
-          <div className="bg-primary/10 p-2.5 rounded-xl">
-            <GraduationCapIcon className="w-6 h-6 text-primary" />
-          </div>
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-400 to-primary animate-text-shine">{t('education.title')}</h2>
-        </div>
+      <div className="orb orb-cyan" style={{ width: 450, height: 450, top: '0%', left: '-12%', opacity: 0.07 }} />
 
-        <div className="relative space-y-8">
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-primary/20 via-primary/10 to-transparent hidden md:block" />
-          
+      <div className="section-inner">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-14"
+        >
+          <p className="text-sm font-medium tracking-widest uppercase mb-3" style={{ color: 'rgba(214, 201, 182, 0.8)' }}>
+            03 — {t('nav.education')}
+          </p>
+          <h2 className="text-4xl sm:text-5xl font-bold gradient-text">
+            {t('education.title')}
+          </h2>
+        </motion.div>
+
+        <div className="space-y-8">
           {education.map((edu, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: index * 0.12 }}
             >
-              <Card className="p-8 glass gradient-border relative hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 hover-lift">
-                <div className="absolute -left-3 top-10 w-6 h-6 rounded-full bg-primary/20 hidden md:flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                </div>
-                
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div className="space-y-3">
-                    <h3 className="font-semibold text-xl tracking-tight">{edu.degree}</h3>
-                    <div className="space-y-2">
-                      <p className="text-primary/90 font-medium">{edu.school}</p>
-                      <div className="flex items-center gap-2 text-muted-foreground/80">
-                        <MapPinIcon className="h-4 w-4" />
-                        <span>{edu.location}</span>
+              <div className="glass-card rounded-2xl p-6 md:p-8 relative overflow-hidden glow-border">
+                {/* Top accent line */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5"
+                  style={{ background: `linear-gradient(90deg, ${edu.accent}60, transparent)` }}
+                />
+
+                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-3">
+                      <GraduationCapIcon className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: edu.accent }} />
+                      <h3 className="font-semibold text-lg leading-snug" style={{ color: 'rgba(255,255,255,0.9)' }}>
+                        {edu.degree}
+                      </h3>
+                    </div>
+                    <div className="pl-8 space-y-1.5">
+                      <p className="font-medium text-sm" style={{ color: edu.accent + 'cc' }}>
+                        {edu.school}
+                      </p>
+                      <div className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                        <MapPinIcon className="h-3.5 w-3.5" />
+                        {edu.location}
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-primary/80 font-medium bg-primary/5 px-4 py-1.5 rounded-full">
-                    <CalendarIcon className="h-4 w-4" />
-                    <span>{edu.period}</span>
+
+                  <div
+                    className="flex items-center gap-2 text-sm font-medium px-3 py-1.5 rounded-full self-start flex-shrink-0"
+                    style={{
+                      background: `${edu.accent}15`,
+                      border: `1px solid ${edu.accent}30`,
+                      color: edu.accent + 'cc',
+                    }}
+                  >
+                    <CalendarIcon className="h-3.5 w-3.5" />
+                    {edu.period}
                   </div>
                 </div>
-                
-                <p className="mt-4 text-muted-foreground/90 leading-relaxed">{edu.description}</p>
-                
-                <ul className="mt-6 grid gap-2">
-                  {edu.achievements.map((achievement, i) => (
-                    <li key={i} className="flex items-start gap-3 text-muted-foreground/80 pl-4 relative">
-                      <span className="absolute left-0 top-2 w-1.5 h-1.5 rounded-full bg-primary/60" />
-                      <span>{achievement}</span>
+
+                <p className="text-sm leading-relaxed pl-8 mb-5" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  {edu.description}
+                </p>
+
+                <ul className="space-y-2 pl-8">
+                  {edu.achievements.map((ach, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                      <CheckCircleIcon className="h-4 w-4 mt-0.5 flex-shrink-0" style={{ color: edu.accent + '80' }} />
+                      {ach}
                     </li>
                   ))}
                 </ul>
-              </Card>
+              </div>
             </motion.div>
           ))}
         </div>

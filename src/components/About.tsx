@@ -1,62 +1,92 @@
-import { Card } from "./ui/card";
 import { TechStack } from "./ui/tech-stack";
 import { motion } from "framer-motion";
-import { CodeIcon, UserIcon } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay: i * 0.15, ease: [0.4, 0, 0.2, 1] },
+  }),
+};
 
 export const About = () => {
   const { t } = useLanguage();
-  return (
-    <section id="about" className="py-20 px-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background/90" />
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_top_left,rgba(var(--primary-rgb),0.08)_0%,transparent_50%)]" />
-        <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_bottom_right,rgba(147,51,234,0.08)_0%,transparent_50%)]" />
-      </div>
 
-      <div className="max-w-4xl mx-auto relative">
-        <div className="flex items-center gap-3 mb-12">
-          <div className="bg-primary/10 p-2 rounded-xl">
-            <UserIcon className="w-6 h-6 text-primary" />
-          </div>
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-400 to-primary animate-text-shine">{t('about.title')}</h2>
-        </div>
+  return (
+    <section id="about" className="section-container">
+      <span className="section-num" aria-hidden="true">01</span>
+
+      {/* Background orbs */}
+      <div className="orb orb-purple" style={{ width: 500, height: 500, top: '-5%', left: '-10%', opacity: 0.08 }} />
+      <div className="orb orb-cyan" style={{ width: 350, height: 350, bottom: '0%', right: '-8%', opacity: 0.07 }} />
+
+      <div className="section-inner">
+        {/* Section heading */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-14"
+        >
+          <p className="text-sm font-medium tracking-widest uppercase mb-3" style={{ color: 'rgba(214, 201, 182, 0.6)' }}>
+            01 — {t('nav.about')}
+          </p>
+          <h2 className="text-4xl sm:text-5xl font-bold gradient-text">
+            {t('about.title')}
+          </h2>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+          {/* Left: about text */}
+          <motion.div
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            className="space-y-6"
           >
-            <Card className="p-8 glass gradient-border hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover-lift">
-              <p className="text-muted-foreground leading-relaxed">
+            <div
+              className="glass-card glow-border rounded-2xl p-8 h-full space-y-6"
+            >
+              <p className="leading-relaxed text-base" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 {t('about.p1')}
               </p>
-              <div className="h-px w-1/3 bg-gradient-to-r from-primary/20 to-transparent my-6" />
-              <p className="text-primary font-medium mt-6 border-l-2 border-primary pl-4">
+              <div
+                className="h-px w-16"
+                style={{ background: 'linear-gradient(90deg, rgba(139,92,246,0.4), transparent)' }}
+              />
+              <blockquote
+                className="text-sm leading-relaxed pl-4 font-medium"
+                style={{
+                  color: 'rgba(214, 201, 182, 0.7)',
+                  borderLeft: '2px solid rgba(214, 201, 182, 0.3)',
+                }}
+              >
                 {t('about.p3')}
-              </p>
-            </Card>
+              </blockquote>
+            </div>
           </motion.div>
 
+          {/* Right: tech stack */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
+            custom={1}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
           >
-            <Card className="p-8 glass gradient-border hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover-lift">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="bg-primary/10 p-2 rounded-xl">
-                  <CodeIcon className="w-5 h-5 text-primary" />
-                </div>
-                <h3 className="font-semibold text-lg">{t('about.skills')}</h3>
-              </div>
+            <div className="glass-card glow-border rounded-2xl p-8 h-full">
+              <h3
+                className="text-sm font-semibold tracking-widest uppercase mb-6"
+                style={{ color: 'rgba(214, 201, 182, 0.6)' }}
+              >
+                {t('about.skills')}
+              </h3>
               <TechStack />
-            </Card>
+            </div>
           </motion.div>
         </div>
       </div>

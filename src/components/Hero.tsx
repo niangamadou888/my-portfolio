@@ -1,161 +1,245 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { GithubIcon, LinkedinIcon, MailIcon, FileDown, Sparkles } from "lucide-react";
-import { Button } from "./ui/button";
+import { GithubIcon, LinkedinIcon, MailIcon, FileDown, ArrowDown } from "lucide-react";
 import { toast } from "./ui/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
 import { useEffect, useRef, useState } from "react";
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
-    }
-  }
-};
+const ROLES = ["Software Developer", "Web Developer", "Mobile Developer", "Game Developer"];
 
-const item = {
-  hidden: { opacity: 0, y: 30, scale: 0.9 },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 10
-    }
-  }
-};
+const TypingRole = () => {
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [pause, setPause] = useState(false);
 
-const glowAnimation = {
-  initial: { opacity: 0.5, scale: 0.8 },
-  animate: {
-    opacity: [0.5, 1, 0.5],
-    scale: [0.8, 1.2, 0.8],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
+  useEffect(() => {
+    if (pause) {
+      const t = setTimeout(() => setPause(false), 1400);
+      return () => clearTimeout(t);
     }
-  }
+
+    const target = ROLES[roleIdx];
+
+    if (!deleting && displayed === target) {
+      setPause(true);
+      setTimeout(() => setDeleting(true), 1400);
+      return;
+    }
+
+    if (deleting && displayed === "") {
+      setDeleting(false);
+      setRoleIdx((i) => (i + 1) % ROLES.length);
+      return;
+    }
+
+    const speed = deleting ? 40 : 70;
+    const t = setTimeout(() => {
+      setDisplayed((d) =>
+        deleting ? d.slice(0, -1) : target.slice(0, d.length + 1)
+      );
+    }, speed);
+    return () => clearTimeout(t);
+  }, [displayed, deleting, roleIdx, pause]);
+
+  return (
+    <span className="gradient-text font-bold">
+      {displayed}
+      <span
+        className="inline-block w-0.5 h-[1em] ml-0.5 align-middle"
+        style={{
+          background: '#22d3ee',
+          animation: 'pingSlow 1s step-end infinite',
+          boxShadow: '0 0 8px rgba(34, 211, 238, 0.6)',
+        }}
+      />
+    </span>
+  );
 };
 
 export const Hero = () => {
-  const { t } = useLanguage();
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const heroRef = useRef<HTMLElement>(null);
+  const { t, language } = useLanguage();
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, -150]);
-  const handleDownload = (language: 'en' | 'fr') => {
-    const pdfUrl = language === 'en' ? '/Amadou Boubacar Niang cv anglais.pdf' : '/Amadou Boubacar Niang - CV.pdf';
-    window.open(pdfUrl, '_blank');
+  const y = useTransform(scrollY, [0, 600], [0, -120]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
+  const handleDownload = (language: 'en' | 'fr') => {
+    const pdfUrl =
+      language === 'en'
+        ? '/Amadou Boubacar Niang cv anglais.pdf'
+        : '/Amadou Boubacar Niang - CV.pdf';
+    window.open(pdfUrl, '_blank');
     toast({
       title: t('hero.toast.title'),
       description: language === 'en' ? t('hero.toast.desc.en') : t('hero.toast.desc.fr'),
     });
   };
 
+  const socials = [
+    { icon: GithubIcon, url: "https://github.com/niangamadou888/", label: "GitHub" },
+    { icon: LinkedinIcon, url: "https://www.linkedin.com/in/amadou-boubacar-niang-09b973160/", label: "LinkedIn" },
+    { icon: MailIcon, url: "mailto:amadouniang2001@gmail.com", label: "Email" },
+  ];
+
   return (
-    <section ref={heroRef} className="min-h-screen flex flex-col justify-center items-center text-center p-4 sm:p-6 relative overflow-hidden">
-      {/* Modern geometric background */}
-      <div className="absolute inset-0 bg-[linear-gradient(45deg,#80808008_1px,transparent_1px),linear-gradient(135deg,#80808008_1px,transparent_1px)] bg-[size:20px_20px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-      
-      {/* Enhanced gradient effects */}
-      <div className="absolute inset-0">
-        <div className="absolute w-full h-full bg-[radial-gradient(circle_at_center,rgba(var(--primary-rgb),0.08)_0%,transparent_65%)]" />
-        <div className="absolute w-full h-full bg-[radial-gradient(circle_at_top_right,rgba(147,51,234,0.08)_0%,transparent_65%)]" />
-      </div>
+    <section className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden px-4">
+      {/* Ambient orbs */}
+      <div className="orb orb-purple" style={{ width: 600, height: 600, top: '-10%', left: '-15%' }} />
+      <div className="orb orb-cyan" style={{ width: 400, height: 400, bottom: '-5%', right: '-10%' }} />
+      <div className="orb orb-pink" style={{ width: 300, height: 300, top: '30%', right: '10%', opacity: 0.07 }} />
 
       <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="space-y-6 sm:space-y-10 relative z-10 max-w-4xl mx-auto"
+        style={{ y, opacity }}
+        className="relative z-10 max-w-4xl mx-auto space-y-8"
       >
-        <motion.div variants={item} className="space-y-4">
-          <div className="inline-block">
-            <motion.div
-              animate={{
-                scale: [1, 1.02, 1],
-                transition: { duration: 2, repeat: Infinity }
-              }}
-            >
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold relative px-2 sm:px-0">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-400 to-primary bg-[length:200%_auto] animate-text-shine">
-                  {t('hero.greeting')}
-                </span>
-                <div className="absolute -inset-x-6 -inset-y-4 bg-gradient-to-r from-primary/20 via-purple-500/20 to-primary/20 blur-2xl opacity-50 group-hover:opacity-75 transition duration-500" />
-              </h1>
-            </motion.div>
-          </div>
-
-          <motion.p variants={item} className="text-lg sm:text-xl md:text-2xl font-medium text-muted-foreground/90">
-            <span className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 flex-wrap justify-center">
-              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-              {t('hero.role.software')}
-              <span className="text-primary/60 hidden sm:inline">•</span>
-              <span className="text-primary/80">{t('hero.role.web')}</span>
-              <span className="text-primary/60 hidden sm:inline">•</span>
-              <span className="text-primary/80">{t('hero.role.mobile')}</span>
-              <span className="text-primary/60 hidden sm:inline">•</span>
-              <span className="text-primary/80">{t('hero.role.gaming')}</span>
-            </span>
-          </motion.p>
+        {/* Greeting chip */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center"
+        >
+          <span
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium"
+            style={{
+              background: 'rgba(214, 201, 182, 0.08)',
+              border: '1px solid rgba(214, 201, 182, 0.2)',
+              color: 'rgba(214, 201, 182, 0.85)',
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse-glow" style={{ background: '#d6c9b6' }} />
+            {language === 'fr' ? 'Disponible pour de nouveaux projets' : 'Available for new projects'}
+          </span>
         </motion.div>
 
-        <motion.p 
-          variants={item}
-          className="text-base sm:text-lg text-muted-foreground/80 max-w-lg mx-auto backdrop-blur-sm bg-background/30 px-4 sm:px-6 py-2 sm:py-3 rounded-full"
+        {/* Main heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+        >
+          <h1
+            className="text-5xl sm:text-6xl md:text-8xl font-bold leading-tight tracking-tight"
+            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+          >
+            <span className="text-white">Amadou</span>
+            <br />
+            <span className="gradient-text">Boubacar Niang</span>
+          </h1>
+        </motion.div>
+
+        {/* Typing role */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="text-2xl sm:text-3xl font-medium"
+          style={{ minHeight: '2.5rem' }}
+        >
+          <TypingRole />
+        </motion.div>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
+          className="text-base sm:text-lg max-w-lg mx-auto leading-relaxed"
+          style={{ color: 'rgba(255,255,255,0.5)' }}
         >
           {t('hero.subtitle')}
         </motion.p>
-        
-        <motion.div 
-          variants={item}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full sm:w-auto px-4 sm:px-0"
+
+        {/* CTA buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center"
         >
-          <Button 
-            variant="default" 
+          <button
             onClick={() => handleDownload('en')}
-            className="w-full sm:w-auto bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 transition-all duration-300 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5"
+            className="btn-glow flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-white"
+            style={{
+              background: 'rgba(214, 201, 182, 0.12)',
+              border: '1px solid rgba(214, 201, 182, 0.3)',
+              boxShadow: '0 0 20px rgba(214, 201, 182, 0.1)',
+              cursor: 'none',
+            }}
           >
-            <FileDown className="mr-2" />
+            <FileDown className="w-4 h-4" />
             {t('hero.download.en')}
-          </Button>
-          <Button 
-            variant="default" 
+          </button>
+          <button
             onClick={() => handleDownload('fr')}
-            className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-primary hover:opacity-90 transition-all duration-300 hover:-translate-y-0.5"
+            className="btn-glow flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold"
+            style={{
+              background: 'rgba(50, 60, 72, 0.6)',
+              border: '1px solid rgba(214, 201, 182, 0.15)',
+              color: 'rgba(214, 201, 182, 0.7)',
+              cursor: 'none',
+            }}
           >
-            <FileDown className="mr-2" />
+            <FileDown className="w-4 h-4" />
             {t('hero.download.fr')}
-          </Button>
+          </button>
         </motion.div>
 
-        <motion.div 
-          variants={item}
-          className="flex gap-4 sm:gap-6 justify-center pt-2 sm:pt-4"
+        {/* Social links */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1.3 }}
+          className="flex gap-5 justify-center pt-2"
         >
-          {[
-            { icon: GithubIcon, url: "https://github.com/niangamadou888/", label: "GitHub profile" },
-            { icon: LinkedinIcon, url: "https://www.linkedin.com/in/amadou-boubacar-niang-09b973160/", label: "LinkedIn profile" },
-            { icon: MailIcon, url: "mailto:amadouniang2001@gmail.com", label: "Send an email" }
-          ].map((social, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              size="icon"
-              aria-label={social.label}
-              className="rounded-full hover:scale-110 transition-all duration-300 hover:bg-primary/5 border-primary/10 hover:border-primary/20 backdrop-blur-sm"
-              onClick={() => window.open(social.url, "_blank")}
+          {socials.map((s) => (
+            <a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              style={{ cursor: 'none' }}
+              className="group flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300"
             >
-              <social.icon className="h-5 w-5" />
-            </Button>
+              <div
+                className="flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 group-hover:scale-110"
+                style={{
+                  background: 'rgba(50, 60, 72, 0.6)',
+                  border: '1px solid rgba(214, 201, 182, 0.12)',
+                  color: 'rgba(214, 201, 182, 0.5)',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(214, 201, 182, 0.4)';
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(214, 201, 182, 0.9)';
+                  (e.currentTarget as HTMLElement).style.boxShadow = '0 0 14px rgba(214, 201, 182, 0.15)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = 'rgba(214, 201, 182, 0.12)';
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(214, 201, 182, 0.5)';
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                }}
+              >
+                <s.icon className="w-4 h-4" />
+              </div>
+            </a>
           ))}
+        </motion.div>
+      </motion.div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 2 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        style={{ color: 'rgba(255,255,255,0.3)' }}
+      >
+        <span className="text-xs tracking-widest uppercase">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
+          <ArrowDown className="w-4 h-4" />
         </motion.div>
       </motion.div>
     </section>

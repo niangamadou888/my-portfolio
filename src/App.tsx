@@ -5,9 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import { ThemeProvider } from "./components/theme-provider";
-import { ThemeToggle } from "./components/theme-toggle";
 import { LanguageProvider } from "./i18n/LanguageContext";
 import { LanguageToggle } from "./components/LanguageToggle";
+import { CustomCursor } from "./components/CustomCursor";
+import { NoiseOverlay } from "./components/NoiseOverlay";
 
 const queryClient = new QueryClient();
 
@@ -16,10 +17,11 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <ThemeProvider defaultTheme="dark">
+      <ThemeProvider defaultTheme="dark" storageKey="portfolio-theme">
         <LanguageProvider>
-          <div className="min-h-screen bg-background text-foreground">
-            <ThemeToggle />
+          <CustomCursor />
+          <NoiseOverlay />
+          <div className="min-h-screen bg-background text-foreground relative">
             <LanguageToggle />
             <BrowserRouter>
               <Routes>

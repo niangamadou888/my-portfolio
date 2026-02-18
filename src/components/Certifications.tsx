@@ -1,103 +1,131 @@
-import { Card } from "./ui/card";
-import { AwardIcon, CalendarIcon, ExternalLinkIcon } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "./ui/button";
+import { AwardIcon, CalendarIcon, ExternalLinkIcon } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 export const Certifications = () => {
   const { t, language } = useLanguage();
+
   const certifications = [
     {
       title: language === 'fr' ? "Ingenieur FullStack" : "FullStack Engineer",
       issuer: "EDACY",
       date: "2025",
-      skills: ["Full Stack Development", "Software Engineering", "Web Development", "Application Architecture"]
+      skills: ["Full Stack Development", "Software Engineering", "Web Development", "Application Architecture"],
+      accent: '#d6c9b6',
     },
     {
       title: "Legacy Full Stack Developer",
       issuer: "freeCodeCamp",
       date: "2023",
       link: "https://www.freecodecamp.org/certification/niangamadou888/full-stack",
-      skills: ["Responsive Web Design", "JavaScript Algorithms and Data Structures", "Data Visualization", "Front End", "Back End", "Information Security and Quality Assurance"]
+      skills: ["Responsive Web Design", "JavaScript Algorithms", "Data Visualization", "Front End", "Back End"],
+      accent: '#d6c9b6',
     },
     {
       title: language === 'fr' ? "Développement Python" : "Python Development",
       issuer: "FORCE-N",
       date: "2023",
       link: "https://formation.force-n.sn/mod/customcert/verify_certificate.php?contextid=418479&code=FI0GkJ2BIi",
-      skills: ["Python", "Angular", "Django", "SQL/NoSQL", "Git", "Docker"]
+      skills: ["Python", "Angular", "Django", "SQL/NoSQL", "Git", "Docker"],
+      accent: '#d6c9b6',
     },
     {
       title: language === 'fr' ? "Administrateur Réseau" : "Network Administrator",
       issuer: "IMSAS",
       date: "2023",
-      skills: ["Network Security", "System Administration", "Protocols", "Troubleshooting", "Infrastructure", "Security"]
-    }
+      skills: ["Network Security", "System Administration", "Protocols", "Troubleshooting", "Infrastructure"],
+      accent: '#f59e0b',
+    },
   ];
 
   return (
-    <section id="certifications" className="py-20 px-4 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(var(--primary-rgb),0.05),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(147,51,234,0.05),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(60deg,#80808008_1px,transparent_1px),linear-gradient(120deg,#80808008_1px,transparent_1px)] bg-[size:24px_24px]" />
+    <section id="certifications" className="section-container">
+      <span className="section-num" aria-hidden="true">04</span>
 
-      <div className="max-w-7xl mx-auto relative">
-        <div className="flex items-center gap-3 mb-12">
-          <div className="bg-primary/10 p-2.5 rounded-xl">
-            <AwardIcon className="w-6 h-6 text-primary" />
-          </div>
-          <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-400 to-primary animate-text-shine">{t('certifications.title')}</h2>
-        </div>
+      <div className="orb orb-purple" style={{ width: 450, height: 450, bottom: '0%', right: '-8%', opacity: 0.08 }} />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="section-inner" style={{ maxWidth: '90rem' }}>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-14"
+        >
+          <p className="text-sm font-medium tracking-widest uppercase mb-3" style={{ color: 'rgba(251, 191, 36, 0.8)' }}>
+            04 — {t('nav.certifications')}
+          </p>
+          <h2 className="text-4xl sm:text-5xl font-bold gradient-text">
+            {t('certifications.title')}
+          </h2>
+        </motion.div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {certifications.map((cert, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group"
             >
-              <Card className="p-8 h-full glass gradient-border hover:shadow-xl hover:shadow-primary/10 transition-all duration-500 group relative hover-lift">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 to-purple-500/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                <div className="flex flex-col h-full">
-                  <div className="space-y-3 flex-grow">
-                    <div className="flex items-start justify-between gap-4">
-                      <h3 className="font-semibold text-lg tracking-tight">{cert.title}</h3>
-                      <div className="flex items-center gap-2 text-primary/80 bg-primary/5 px-3 py-1 rounded-full text-sm">
-                        <CalendarIcon className="h-4 w-4" />
-                        <span>{cert.date}</span>
-                      </div>
-                    </div>
-                    <p className="text-primary/90 font-medium">{cert.issuer}</p>
-                  </div>
+              <div
+                className="glass-card rounded-2xl p-6 h-full flex flex-col relative overflow-hidden transition-all duration-350 hover:scale-[1.02]"
+                style={{ cursor: 'default' }}
+              >
+                {/* Top accent bar */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: `linear-gradient(90deg, ${cert.accent}, transparent)` }}
+                />
 
-                  <div className="mt-6 space-y-6">
-                    <div className="flex flex-wrap gap-2">
-                      {cert.skills.map((skill, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1.5 bg-primary/5 rounded-full text-sm text-primary/80 hover:bg-primary/10 transition-colors duration-300"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-
-                    {cert.link && (
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-between hover:bg-primary/10 transition-all duration-300 group/btn"
-                        onClick={() => window.open(cert.link, '_blank')}
-                      >
-                        {t('certifications.view')}
-                        <ExternalLinkIcon className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                      </Button>
-                    )}
+                <div className="flex items-start justify-between mb-3">
+                  <AwardIcon className="h-5 w-5 flex-shrink-0 mt-0.5" style={{ color: cert.accent + 'cc' }} />
+                  <div
+                    className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full"
+                    style={{
+                      background: `${cert.accent}12`,
+                      border: `1px solid ${cert.accent}25`,
+                      color: cert.accent + 'bb',
+                    }}
+                  >
+                    <CalendarIcon className="h-3 w-3" />
+                    {cert.date}
                   </div>
                 </div>
-              </Card>
+
+                <h3 className="font-semibold text-base leading-snug mb-1" style={{ color: 'rgba(255,255,255,0.88)' }}>
+                  {cert.title}
+                </h3>
+                <p className="text-sm font-medium mb-4" style={{ color: cert.accent + 'cc' }}>
+                  {cert.issuer}
+                </p>
+
+                <p className="text-xs leading-relaxed flex-1" style={{ color: cert.accent + '88' }}>
+                  {cert.skills.join(' · ')}
+                </p>
+
+                {cert.link && (
+                  <a
+                    href={cert.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ cursor: 'none', color: cert.accent + 'bb' }}
+                    className="mt-5 flex items-center justify-between text-xs font-medium pt-4 border-t transition-colors duration-200 hover:opacity-100"
+                    onMouseEnter={e => (e.currentTarget.style.color = cert.accent)}
+                    onMouseLeave={e => (e.currentTarget.style.color = cert.accent + 'bb')}
+                  >
+                    <span
+                      style={{ borderColor: cert.accent + '20' }}
+                      className="border-t"
+                    >
+                      {t('certifications.view')}
+                    </span>
+                    <ExternalLinkIcon className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                )}
+              </div>
             </motion.div>
           ))}
         </div>
