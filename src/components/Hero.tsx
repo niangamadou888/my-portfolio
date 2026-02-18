@@ -141,14 +141,15 @@ export const Hero = () => {
           className="flex gap-4 sm:gap-6 justify-center pt-2 sm:pt-4"
         >
           {[
-            { icon: GithubIcon, url: "https://github.com/niangamadou888/" },
-            { icon: LinkedinIcon, url: "https://www.linkedin.com/in/amadou-boubacar-niang-09b973160/" },
-            { icon: MailIcon, url: "mailto:amadouniang2001@gmail.com" }
+            { icon: GithubIcon, url: "https://github.com/niangamadou888/", label: "GitHub profile" },
+            { icon: LinkedinIcon, url: "https://www.linkedin.com/in/amadou-boubacar-niang-09b973160/", label: "LinkedIn profile" },
+            { icon: MailIcon, url: "mailto:amadouniang2001@gmail.com", label: "Send an email" }
           ].map((social, index) => (
-            <Button 
+            <Button
               key={index}
-              variant="outline" 
+              variant="outline"
               size="icon"
+              aria-label={social.label}
               className="rounded-full hover:scale-110 transition-all duration-300 hover:bg-primary/5 border-primary/10 hover:border-primary/20 backdrop-blur-sm"
               onClick={() => window.open(social.url, "_blank")}
             >

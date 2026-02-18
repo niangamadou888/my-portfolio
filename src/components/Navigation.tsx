@@ -51,6 +51,9 @@ export const Navigation = () => {
         size="icon"
         className="fixed top-4 right-4 z-50 md:hidden"
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
+        aria-controls="mobile-nav"
       >
         {isOpen ? (
           <X className="h-6 w-6" />
@@ -60,7 +63,7 @@ export const Navigation = () => {
       </Button>
 
       {/* Desktop Navigation */}
-      <nav className="hidden md:block fixed top-0 right-0 h-screen z-40 pr-8 pt-20">
+      <nav aria-label="Main navigation" className="hidden md:block fixed top-0 right-0 h-screen z-40 pr-8 pt-20">
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -94,6 +97,9 @@ export const Navigation = () => {
 
       {/* Mobile Navigation */}
       <motion.div
+        id="mobile-nav"
+        role="dialog"
+        aria-label="Mobile navigation menu"
         initial={{ opacity: 0, x: "100%" }}
         animate={{ opacity: isOpen ? 1 : 0, x: isOpen ? 0 : "100%" }}
         transition={{ duration: 0.3 }}

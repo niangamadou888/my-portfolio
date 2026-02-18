@@ -114,15 +114,14 @@ export const Projects = () => {
       liveUrl: "https://glowlikes.it/",
     },
     {
-      title: "Mini Social Network",
+      title: "PRNow",
       description: {
-        en: "A MERN stack social platform featuring user authentication, publication management, and an interactive dashboard.",
-        fr: "Une plateforme sociale MERN avec authentification utilisateur, gestion des publications et tableau de bord interactif.",
+        en: "An AI-powered press release distribution platform connecting businesses with 400+ publishers across 190 countries, enabling affordable global media coverage at a fraction of traditional PR agency costs.",
+        fr: "Une plateforme de distribution de communiqués de presse propulsée par l'IA, connectant les entreprises à plus de 400 éditeurs dans 190 pays pour une couverture médiatique mondiale abordable, à une fraction du coût des agences de relations publiques traditionnelles.",
       },
-      image: "/mini-social-network.png",
-      tags: ["MongoDB", "Express","React", "Node.js"],
-      liveUrl: "https://mini-social-network.netlify.app",
-      githubUrl: "https://github.com/niangamadou888/Mini-Social-Network"
+      image: "/prnow.png",
+      tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "MySQL"],
+      liveUrl: "https://prnow.io",
     },
     {
       title: "Podcast Transcription Platform",
