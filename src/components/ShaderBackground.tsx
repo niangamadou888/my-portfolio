@@ -101,12 +101,12 @@ export const ShaderBackground = () => {
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resize, { passive: true });
 
     const handleMouse = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: window.innerHeight - e.clientY };
     };
-    window.addEventListener('mousemove', handleMouse);
+    window.addEventListener('mousemove', handleMouse, { passive: true });
 
     const startTime = Date.now();
     let lastFrameTime = 0;

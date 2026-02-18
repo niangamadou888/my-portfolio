@@ -1,14 +1,36 @@
-import { useEffect, useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 
 export const ScrollProgress = () => {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  const barRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let rafId: number | null = null;
+
+    const update = () => {
+      rafId = null;
+      const bar = barRef.current;
+      if (!bar) return;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.transform = `scaleX(${total > 0 ? window.scrollY / total : 0})`;
+    };
+
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(update);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   return (
-    <motion.div
+    <div
+      ref={barRef}
       className="scroll-progress"
-      style={{ scaleX, width: '100%' }}
+      style={{ transformOrigin: '0 0', transform: 'scaleX(0)', width: '100%' }}
     />
   );
 };

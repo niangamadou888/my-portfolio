@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { GithubIcon, LinkedinIcon, MailIcon, FileDown, ArrowDown } from "lucide-react";
 import { toast } from "./ui/use-toast";
 import { useLanguage } from "@/i18n/LanguageContext";
@@ -58,9 +58,6 @@ const TypingRole = () => {
 
 export const Hero = () => {
   const { t, language } = useLanguage();
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 600], [0, -120]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   const handleDownload = (language: 'en' | 'fr') => {
     const pdfUrl =
@@ -87,10 +84,7 @@ export const Hero = () => {
       <div className="orb orb-cyan" style={{ width: 400, height: 400, bottom: '-5%', right: '-10%' }} />
       <div className="orb orb-pink" style={{ width: 300, height: 300, top: '30%', right: '10%', opacity: 0.07 }} />
 
-      <motion.div
-        style={{ y, opacity }}
-        className="relative z-10 max-w-4xl mx-auto space-y-8"
-      >
+      <div className="relative z-10 max-w-4xl mx-auto space-y-8">
         {/* Greeting chip */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -111,12 +105,8 @@ export const Hero = () => {
           </span>
         </motion.div>
 
-        {/* Main heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-        >
+        {/* Main heading — rendered immediately, no JS animation delay (critical for LCP) */}
+        <div>
           <h1
             className="text-5xl sm:text-6xl md:text-8xl font-bold leading-tight tracking-tight"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
@@ -125,7 +115,7 @@ export const Hero = () => {
             <br />
             <span className="gradient-text">Boubacar Niang</span>
           </h1>
-        </motion.div>
+        </div>
 
         {/* Typing role */}
         <motion.div
@@ -224,7 +214,7 @@ export const Hero = () => {
             </a>
           ))}
         </motion.div>
-      </motion.div>
+      </div>
 
       {/* Scroll indicator */}
       <motion.div

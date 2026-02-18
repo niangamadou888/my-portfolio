@@ -22,36 +22,38 @@ export const Navigation = () => {
 
   useEffect(() => {
     const sectionIds = ["home", "about", "experience", "education", "certifications", "projects", "contact"];
-    let cachedOffsets: { id: string; top: number }[] = [];
+    let rafId: number | null = null;
 
-    const updateOffsets = () => {
-      cachedOffsets = sectionIds
-        .map(id => {
-          const el = document.getElementById(id);
-          if (!el) return { id, top: -1 };
-          return { id, top: el.getBoundingClientRect().top + window.scrollY };
-        })
-        .filter(s => s.top >= 0);
-    };
-    updateOffsets();
-
-    const handleScroll = () => {
+    const update = () => {
+      rafId = null;
       setScrolled(window.scrollY > 40);
-      const scrollPos = window.scrollY + window.innerHeight / 3;
-      for (let i = cachedOffsets.length - 1; i >= 0; i--) {
-        if (cachedOffsets[i].top <= scrollPos) {
-          setActiveSection(cachedOffsets[i].id);
-          break;
+
+      // Compute positions once per rAF frame — batch getBoundingClientRect calls
+      // so lazy-loaded sections are always found once they're in the DOM.
+      const threshold = window.innerHeight * 0.4;
+      let current = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        // Section becomes active when its top crosses the upper 40% of the viewport
+        if (el.getBoundingClientRect().top <= threshold) {
+          current = id;
         }
       }
+      setActiveSection(current);
+    };
+
+    const handleScroll = () => {
+      if (rafId !== null) return; // already queued
+      rafId = requestAnimationFrame(update);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", updateOffsets, { passive: true });
-    handleScroll();
+    update(); // run once on mount
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", updateOffsets);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, []);
 

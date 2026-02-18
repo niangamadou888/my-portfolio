@@ -34,6 +34,11 @@
     <meta name="twitter:description" content="Portfolio of Amadou Boubacar Niang, a full-stack and mobile developer specializing in React, TypeScript, Next.js, and game development." />
     <meta name="twitter:image" content="https://amadouniang.dev/og-image.png" />
 
+    <!-- Preconnect for Google Fonts (eliminates render-blocking font request) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" />
+
     <!-- hreflang for bilingual content -->
     <link rel="alternate" hreflang="en" href="https://amadouniang.dev/" />
     <link rel="alternate" hreflang="fr" href="https://amadouniang.dev/" />
@@ -70,7 +75,7 @@
 
   <body>
     <div id="root"></div>
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module" defer></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
