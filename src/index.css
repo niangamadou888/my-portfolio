@@ -105,6 +105,12 @@
     cursor: none;
   }
 
+  /* Override UA stylesheet which sets cursor:pointer directly on <a>/<button>.
+     Inherited cursor:none from html loses to a direct UA rule, so we set it explicitly. */
+  a, button, [role="button"], input, textarea, select, label, [tabindex] {
+    cursor: none;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', sans-serif;
@@ -133,7 +139,8 @@
 
   /* Re-enable cursor on touch devices */
   @media (hover: none) {
-    html {
+    html,
+    a, button, [role="button"], input, textarea, select, label, [tabindex] {
       cursor: auto;
     }
   }

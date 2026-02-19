@@ -10,10 +10,10 @@ export const Experience = () => {
       title: language === 'fr' ? "Développeur Web Freelance" : "Web Developer Freelance",
       company: "Upwork",
       location: language === 'fr' ? "Freelance" : "Freelance",
-      period: language === 'fr' ? "Mai 2024 - Août 2024" : "May 2024 – Aug 2024",
+      period: language === 'fr' ? "Mai 2024 - Janvier 2026" : "May 2024 – Jan 2026",
       description:
         language === 'fr'
-          ? "Conception et programmation de sites web réactifs et esthétiques."
+          ? "Conception et programmation de solutions web réactifs et esthétiques."
           : "Design and programming of responsive and aesthetic websites.",
     },
     {

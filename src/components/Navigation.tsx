@@ -79,7 +79,6 @@ export const Navigation = () => {
                     ? "text-white"
                     : "text-white/45 hover:text-white/80"
                 )}
-                style={{ cursor: 'none' }}
               >
                 {isActive && (
                   <span
@@ -110,7 +109,6 @@ export const Navigation = () => {
               key={item.id}
               href={item.href}
               title={item.name}
-              style={{ cursor: 'none' }}
               className="group flex items-center gap-2"
             >
               <span
@@ -143,7 +141,6 @@ export const Navigation = () => {
         style={{
           background: 'rgba(255,255,255,0.05)',
           border: '1px solid rgba(255,255,255,0.1)',
-          cursor: 'none',
         }}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -199,7 +196,6 @@ export const Navigation = () => {
                 href={item.href}
                 onClick={() => setIsOpen(false)}
                 style={{
-                  cursor: 'none',
                   animation: isOpen ? `fadeInUp 0.4s ease ${0.1 + i * 0.07}s both` : 'none',
                 }}
                 className={cn(

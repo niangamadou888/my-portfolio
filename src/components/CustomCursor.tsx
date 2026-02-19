@@ -5,8 +5,11 @@ export const CustomCursor = () => {
   const dotRef = useRef<HTMLDivElement>(null);
   // Track state in a ref to avoid React re-renders on every mousemove
   const stateRef = useRef({ pointer: false, visible: false });
+  // Evaluated once — device type doesn't change mid-session
+  const isTouch = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
   useEffect(() => {
+    if (isTouch) return;
     const ring = ringRef.current;
     const dot = dotRef.current;
     if (!ring || !dot) return;
@@ -49,6 +52,8 @@ export const CustomCursor = () => {
       document.documentElement.removeEventListener('mouseenter', onEnter);
     };
   }, []);
+
+  if (isTouch) return null;
 
   return (
     <>
