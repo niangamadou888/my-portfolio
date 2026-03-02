@@ -108,7 +108,7 @@
   /* Override UA stylesheet which sets cursor:pointer directly on <a>/<button>.
      Inherited cursor:none from html loses to a direct UA rule, so we set it explicitly. */
   a, button, [role="button"], input, textarea, select, label, [tabindex] {
-    cursor: none;
+    cursor: none !important;
   }
 
   body {
@@ -141,7 +141,7 @@
   @media (hover: none) {
     html,
     a, button, [role="button"], input, textarea, select, label, [tabindex] {
-      cursor: auto;
+      cursor: auto !important;
     }
   }
 

@@ -155,7 +155,7 @@ export const Projects = () => {
       <div className="orb orb-purple" style={{ width: 400, height: 400, top: '5%', right: '-5%', opacity: 0.07 }} />
       <div className="orb orb-cyan" style={{ width: 300, height: 300, bottom: '10%', left: '-5%', opacity: 0.06 }} />
 
-      <div className="section-inner" style={{ maxWidth: '90rem' }}>
+      <div className="section-inner" style={{ maxWidth: '72rem' }}>
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}

@@ -44,7 +44,7 @@ export const Certifications = () => {
 
       <div className="orb orb-purple" style={{ width: 450, height: 450, bottom: '0%', right: '-8%', opacity: 0.08 }} />
 
-      <div className="section-inner" style={{ maxWidth: '90rem' }}>
+      <div className="section-inner" style={{ maxWidth: '72rem' }}>
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
