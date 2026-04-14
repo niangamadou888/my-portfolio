@@ -61,7 +61,7 @@ export const Hero = () => {
   const handleDownload = (language: 'en' | 'fr') => {
     const pdfUrl =
       language === 'en'
-        ? '/Amadou Boubacar Niang cv anglais.pdf'
+        ? '/Amadou Boubacar Niang - Resume.pdf'
         : '/Amadou Boubacar Niang - CV.pdf';
     window.open(pdfUrl, '_blank');
     toast({

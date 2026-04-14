@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Amadou Boubacar Niang — CV</title>
+<style>
+  @page { size: A4; margin: 14mm 14mm 14mm 14mm; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 10pt;
+    line-height: 1.42;
+    color: #1f2937;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  a { color: #0f766e; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---------- HEADER ---------- */
+  header {
+    border-bottom: 2px solid #0f766e;
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+  }
+  header .name {
+    font-size: 24pt;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #0f172a;
+    margin: 0;
+  }
+  header .title {
+    font-size: 12pt;
+    font-weight: 600;
+    color: #0f766e;
+    margin: 2px 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  header .meta {
+    font-size: 9pt;
+    color: #374151;
+  }
+  header .meta .row { margin: 1px 0; }
+  header .meta .sep { color: #9ca3af; padding: 0 6px; }
+
+  /* ---------- SECTIONS ---------- */
+  section { margin-bottom: 12px; page-break-inside: avoid; }
+  h2 {
+    font-size: 11pt;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: #0f766e;
+    border-bottom: 1px solid #d1d5db;
+    padding-bottom: 3px;
+    margin: 0 0 8px 0;
+  }
+
+  .profil p { margin: 0; text-align: justify; }
+  .profil strong { color: #0f172a; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .job { margin-bottom: 10px; page-break-inside: avoid; }
+  .job-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .job-title {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 10.5pt;
+  }
+  .job-title .company { color: #0f766e; font-weight: 600; }
+  .job-date {
+    font-size: 9pt;
+    color: #6b7280;
+    font-style: italic;
+    white-space: nowrap;
+  }
+  .job ul {
+    margin: 4px 0 0 0;
+    padding-left: 16px;
+  }
+  .job li { margin-bottom: 2px; }
+  .job li strong { color: #0f172a; }
+
+  /* ---------- PROJECTS ---------- */
+  .project { margin-bottom: 8px; page-break-inside: avoid; }
+  .project-name {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 10pt;
+  }
+  .project-stack {
+    font-size: 9pt;
+    color: #0f766e;
+    font-style: italic;
+    margin: 1px 0;
+  }
+  .project-links { font-size: 8.5pt; margin: 1px 0; }
+  .project-desc { margin: 2px 0 0 0; }
+
+  /* ---------- TWO-COLUMN GRID ---------- */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skills p { margin: 3px 0; }
+  .skills .cat {
+    font-weight: 700;
+    color: #0f172a;
+    display: inline-block;
+    min-width: 120px;
+  }
+
+  /* ---------- EDUCATION / CERTS ---------- */
+  .edu-item, .cert-item { margin-bottom: 7px; }
+  .edu-title {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 10pt;
+  }
+  .edu-school { color: #0f766e; font-size: 9.5pt; }
+  .edu-date { color: #6b7280; font-style: italic; font-size: 9pt; }
+  .edu-desc { font-size: 9pt; color: #374151; margin-top: 1px; }
+
+  .cert-item { font-size: 9.5pt; }
+  .cert-item strong { color: #0f172a; }
+  .cert-item .issuer { color: #6b7280; }
+
+  /* ---------- LANGS ---------- */
+  .langs { font-size: 9.5pt; }
+  .langs .lang {
+    font-weight: 700;
+    color: #0f172a;
+    display: inline-block;
+    min-width: 80px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="name">Amadou Boubacar NIANG</h1>
+  <div class="title">Développeur Full-Stack</div>
+  <div class="meta">
+    <div class="row">
+      Dakar, Sénégal
+      <span class="sep">·</span>Disponible (freelance / CDI / remote)
+      <span class="sep">·</span>(+221) 76 546 92 73
+      <span class="sep">·</span><a href="mailto:amadouniang2001@gmail.com">amadouniang2001@gmail.com</a>
+    </div>
+    <div class="row">
+      <a href="https://github.com/niangamadou888">github.com/niangamadou888</a>
+      <span class="sep">·</span><a href="https://www.linkedin.com/in/amadou-boubacar-niang-09b973160/">linkedin.com/in/amadou-boubacar-niang</a>
+    </div>
+  </div>
+</header>
+
+<section class="profil">
+  <h2>Profil</h2>
+  <p>
+    Développeur Full-Stack (Angular / React / Next.js / Node.js / Spring Boot) avec plus de
+    <strong>2 ans d'expérience</strong> sur des projets livrés en production, dont
+    <strong>PRNow.io</strong>, plateforme SaaS propulsée par IA connectant les entreprises à
+    <strong>400+ éditeurs dans 190 pays</strong>, et <strong>Logidoo</strong>, module
+    d'optimisation logistique 3D déployé en production. Actuellement en Master d'Ingénierie
+    Logicielle à l'UNCHK, certifié <strong>FullStack Engineer EDACY (2025)</strong>.
+    J'interviens de la conception de l'architecture jusqu'au déploiement, avec une exigence
+    forte sur la qualité du code et l'expérience utilisateur.
+  </p>
+</section>
+
+<section>
+  <h2>Expérience professionnelle</h2>
+
+  <div class="job">
+    <div class="job-head">
+      <div class="job-title">Développeur Web Full-Stack — <span class="company">Freelance (Upwork)</span></div>
+      <div class="job-date">Mai 2024 – Présent · Remote</div>
+    </div>
+    <ul>
+      <li>Conception, développement et mise en production de <strong>4 applications web</strong> pour des clients internationaux (Europe, USA), stack principale Next.js / React / Node.js / MongoDB / MySQL.</li>
+      <li>Développement de <strong>PRNow.io</strong>, plateforme SaaS de distribution de communiqués de presse propulsée par IA, connectant les entreprises à <strong>400+ éditeurs dans 190 pays</strong> (Next.js, TypeScript, Tailwind, MySQL).</li>
+      <li>Développement de <strong>Podcasttranscript.ai</strong>, application full-stack de recherche et transcription automatique de podcasts via l'API speech-to-text Whisper / AssemblyAI (Next.js, Node.js, Express, MongoDB).</li>
+      <li>Développement de <strong>Glowlikes.it</strong>, service multi-plateforme d'engagement social pour le marché italien (React, Vite, Tailwind CSS).</li>
+      <li>Intégration d'APIs tierces, authentification, responsive design, déploiement continu (Netlify / Vercel), communication directe en anglais avec les clients.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <div class="job-title">Développeur Jeu Vidéo — <span class="company">Learning Adventure, France</span></div>
+      <div class="job-date">Juillet 2024 – Décembre 2024 · Remote</div>
+    </div>
+    <ul>
+      <li>Conception et programmation d'un <strong>serious game 3D générique</strong> (Unity / C#) interagissant avec une plateforme d'apprentissage distante via API REST.</li>
+      <li>Architecture modulaire permettant la réutilisation du moteur pour plusieurs scénarios pédagogiques, avec synchronisation serveur et suivi de progression apprenant.</li>
+      <li>Livraison conforme au cahier des charges et respect des délais client sur toute la durée de la mission.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <div class="job-title">Administrateur Réseau — <span class="company">SAED, Saint-Louis</span></div>
+      <div class="job-date">Mars 2023 – Juin 2023 · Sénégal</div>
+    </div>
+    <ul>
+      <li>Gestion des incidents réseaux et systèmes sur le parc informatique de la société (Société d'Aménagement et d'Exploitation des Terres du Delta du Fleuve Sénégal).</li>
+      <li>Installation et configuration des nouveaux équipements (postes de travail, switches, imprimantes réseau).</li>
+      <li>Support utilisateur niveau 1–2 et formation du personnel aux bonnes pratiques.</li>
+    </ul>
+  </div>
+
+  <div class="job">
+    <div class="job-head">
+      <div class="job-title">Développeur Jeu Vidéo — <span class="company">Hatice Technologie</span></div>
+      <div class="job-date">Mars 2022 – Juin 2022 · Dakar, Sénégal</div>
+    </div>
+    <ul>
+      <li>Conception et développement de jeux mobiles (Unity / C#) conformes au cahier des charges.</li>
+      <li>Travail en équipe sur l'intégration d'assets, les mécaniques de gameplay et les builds multiplateformes.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Projets sélectionnés</h2>
+
+  <div class="project">
+    <div class="project-name">Logidoo — Module d'Optimisation de Chargement</div>
+    <div class="project-stack">MongoDB · Express · Angular · Node.js (MEAN)</div>
+    <div class="project-links">
+      Démo : <a href="https://logidoo.netlify.app">logidoo.netlify.app</a>
+      <span class="sep">·</span>
+      Code : <a href="https://github.com/niangamadou888/logidoo-projet-aide-au-chargement">github.com/niangamadou888/logidoo-projet-aide-au-chargement</a>
+    </div>
+    <p class="project-desc">Module métier calculant automatiquement l'usage de l'espace et du poids dans camions et conteneurs. Visualisation 3D interactive, export PDF, réduction des coûts et erreurs de planification logistique.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-name">PRNow.io — Plateforme SaaS IA de Distribution de Communiqués de Presse</div>
+    <div class="project-stack">Next.js · React · TypeScript · Tailwind CSS · MySQL</div>
+    <div class="project-links">Live : <a href="https://prnow.io">prnow.io</a></div>
+    <p class="project-desc">Plateforme propulsée par IA connectant les entreprises à plus de 400 éditeurs dans 190 pays. Gestion du workflow de distribution, dashboard client, intégrations tierces.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-name">Podcasttranscript.ai — Plateforme de Transcription de Podcasts</div>
+    <div class="project-stack">Next.js · Node.js · Express · MongoDB · Whisper AI</div>
+    <div class="project-links">Live : <a href="https://podcasttranscript.ai">podcasttranscript.ai</a></div>
+    <p class="project-desc">Application full-stack permettant la recherche de podcasts et la transcription automatique des fichiers audio via API speech-to-text.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-name">Plateforme de Recrutement de Tuteurs — UNCHK</div>
+    <div class="project-stack">Angular · Java · Spring Boot · MySQL</div>
+    <div class="project-links">Code : <a href="https://github.com/niangamadou888/Application-de-Gestion-du-Recrutement-des-Tuteurs-Back-End">github.com/niangamadou888/Application-de-Gestion-du-Recrutement-des-Tuteurs-Back-End</a></div>
+    <p class="project-desc">Application full-stack de gestion du recrutement de tuteurs, développée pour l'Université Numérique Cheikh Hamidou Kane dans le cadre d'un projet universitaire.</p>
+  </div>
+
+  <div class="project">
+    <div class="project-name">En Route Vers UNCHK — Serious Game 3D Mobile</div>
+    <div class="project-stack">Unity · C# · Game Design</div>
+    <p class="project-desc">Serious game mobile 3D sur la vie de Cheikh Hamidou Kane, avec scénarios interactifs et intégration à une plateforme d'apprentissage pour le suivi de progression.</p>
+  </div>
+</section>
+
+<section class="skills">
+  <h2>Compétences techniques</h2>
+  <p><span class="cat">Front-end</span> Angular, React, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS, HTML5, CSS3</p>
+  <p><span class="cat">Back-end</span> Node.js, Express, Spring Boot (Java), Django (Python), API REST</p>
+  <p><span class="cat">Bases de données</span> MongoDB, MySQL, PostgreSQL</p>
+  <p><span class="cat">Mobile &amp; Jeu</span> Unity 3D, C#</p>
+  <p><span class="cat">Outils &amp; DevOps</span> Git / GitHub, Docker, Vite, déploiement Netlify / Vercel, CI/CD</p>
+  <p><span class="cat">Langages</span> JavaScript / TypeScript, Java, Python, C#, C, SQL</p>
+</section>
+
+<div class="grid-2">
+  <section>
+    <h2>Formation</h2>
+
+    <div class="edu-item">
+      <div class="edu-title">Master en Ingénierie Logicielle</div>
+      <div class="edu-school">Université Numérique Cheikh Hamidou Kane (UNCHK), Dakar</div>
+      <div class="edu-date">En cours · obtention prévue 2026</div>
+      <div class="edu-desc">Spécialisation en architectures logicielles avancées et développement d'applications d'entreprise.</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Licence en Informatique &amp; Développement d'Applications</div>
+      <div class="edu-school">UNCHK, Dakar</div>
+      <div class="edu-date">2023</div>
+      <div class="edu-desc">Web, mobile et gaming — apprentissage par projets réels.</div>
+    </div>
+
+    <div class="edu-item">
+      <div class="edu-title">Baccalauréat STEG</div>
+      <div class="edu-school">Lycée Technique André Peytavin, Saint-Louis</div>
+      <div class="edu-date">2019</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Certifications</h2>
+
+    <div class="cert-item">
+      <strong>Ingénieur FullStack</strong> — <span class="issuer">EDACY, 2025</span>
+    </div>
+    <div class="cert-item">
+      <strong>Full-Stack Developer</strong> — <span class="issuer">freeCodeCamp, 2023</span><br>
+      <a href="https://www.freecodecamp.org/certification/niangamadou888/full-stack">Vérifier le certificat</a>
+    </div>
+    <div class="cert-item">
+      <strong>Développement Python</strong> — <span class="issuer">FORCE-N, 2023</span><br>
+      <a href="https://formation.force-n.sn/mod/customcert/verify_certificate.php?contextid=418479&code=FI0GkJ2BIi">Vérifier le certificat</a>
+    </div>
+    <div class="cert-item">
+      <strong>Administrateur Réseau</strong> — <span class="issuer">IMSAS, 2023</span>
+    </div>
+
+    <h2 style="margin-top: 12px;">Langues</h2>
+    <div class="langs">
+      <p><span class="lang">Français</span> Langue maternelle</p>
+      <p><span class="lang">Anglais</span> Professionnel (clients internationaux Upwork)</p>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>
