@@ -85,14 +85,14 @@ export const Projects = () => {
       githubUrl: "https://github.com/niangamadou888/City-Life",
     },
     {
-      title: "Glowlikes",
+      title: "TopAccounts",
       description: {
-        en: "GlowyViews is a multi-platform social media service that helps users purchase social engagement metrics like followers, likes, and views.",
-        fr: "GlowyViews est un service multi-plateforme de réseaux sociaux qui aide les utilisateurs à acheter des métriques d'engagement.",
+        en: "A verified marketplace for buying and selling social media, gaming, and streaming accounts with escrow-protected transactions and 2,400+ listings.",
+        fr: "Une marketplace vérifiée pour acheter et vendre des comptes de réseaux sociaux, gaming et streaming, avec transactions sécurisées par séquestre et plus de 2 400 annonces.",
       },
-      image: "/glowlikes.png",
-      tags: ["React", "Vite", "Tailwind CSS"],
-      liveUrl: "https://glowlikes.it/",
+      image: "/topaccounts.png",
+      tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "MySQL"],
+      liveUrl: "https://topaccounts.io",
     },
     {
       title: "PRNow",
