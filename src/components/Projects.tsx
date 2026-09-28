@@ -54,6 +54,17 @@ export const Projects = () => {
 
   const webProjects: Project[] = [
     {
+      title: "Wastewater Systems Deck",
+      description: {
+        en: "An interactive sales deck for a septic and sewage tank maker, styled as CAD drawing sheets. Consultants enter a population equivalent and the deck picks the model, redraws it to scale and pre-fills a WhatsApp enquiry. Works offline as one HTML file, with keyboard, swipe and QR sharing. Portfolio concept with a fictional brand.",
+        fr: "Une présentation commerciale interactive pour un fabricant de fosses septiques et de stations d'épuration, conçue comme des plans CAO. Le consultant saisit l'équivalent-habitant : la présentation choisit le modèle, le redessine à l'échelle et prépare une demande WhatsApp. Un seul fichier HTML qui fonctionne hors ligne, avec clavier, balayage et partage par QR code. Projet de portfolio avec une marque fictive.",
+      },
+      image: "/wastewater-deck.png",
+      tags: ["JavaScript", "SVG", "esbuild", "Playwright"],
+      liveUrl: "https://wastewater-deck.vercel.app/",
+      githubUrl: "https://github.com/niangamadou888/wastewater-deck",
+    },
+    {
       title: "Logidoo - Module Chargement",
       description: {
         en: "Load optimization module for Logidoo that automatically calculates space and weight usage in trucks and containers, reducing costs and planning errors with 3D visualization and PDF export.",
