@@ -5,10 +5,12 @@ node_modules/
 
 # Testing
 coverage/
+.vitest/
 
 # Production
 build/
-dist/
+/dist/
+.astro/
 out/
 
 # Misc
@@ -44,3 +46,15 @@ deno.lock
 
 # Local secrets for `wrangler dev`
 .dev.vars
+
+# Playwright
+test-results/
+playwright-report/
+
+.lighthouse/
+
+# Private product names checked by the tests (see forbidden.local.example.json)
+forbidden.local.json
+
+# Design spec and implementation plan (describe client projects)
+docs/superpowers/

@@ -1,0 +1,54 @@
+---
+import Logo from "@/components/Logo.astro";
+import MobileMenu from "@/components/MobileMenu.astro";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, otherLang, t } from "@/i18n/utils";
+import { navItems } from "@/lib/nav";
+
+interface Props {
+  lang: Lang;
+  path: string;
+  hideLangSwitch?: boolean;
+}
+
+const { lang, path, hideLangSwitch = false } = Astro.props;
+const items = navItems(lang, path);
+const switchLang = otherLang(lang);
+const switchHref = hideLangSwitch ? undefined : localizePath(path, switchLang);
+---
+<header>
+  <Logo lang={lang} />
+  <nav
+    aria-label={t(lang, "nav.primary")}
+    class="hidden md:flex fixed top-0 inset-x-0 z-40 justify-center pt-5 pointer-events-none"
+    style="animation: fadeInDown 0.7s ease 0.3s both"
+  >
+    <div class="pointer-events-auto flex items-center gap-1 px-3 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/[0.07]">
+      {items.map((item) => (
+        <a
+          href={item.href}
+          aria-current={item.active ? (item.exact ? "page" : "true") : undefined}
+          class:list={[
+            "px-4 py-1.5 text-sm font-medium rounded-full border transition-colors duration-300",
+            item.active
+              ? "text-white bg-[rgba(214,201,182,0.1)] border-[rgba(214,201,182,0.25)]"
+              : "text-white/70 hover:text-white border-transparent",
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
+      {switchHref && (
+        <a
+          href={switchHref}
+          hreflang={switchLang}
+          aria-label={t(lang, "lang.switchLabel")}
+          class="ml-1 px-3 py-1.5 text-xs font-semibold tracking-widest rounded-full text-[#d6c9b6] border border-[rgba(214,201,182,0.25)] hover:border-[rgba(214,201,182,0.5)] transition-colors"
+        >
+          {t(lang, "lang.switchShort")}
+        </a>
+      )}
+    </div>
+  </nav>
+  <MobileMenu lang={lang} items={items} switchHref={switchHref} />
+</header>

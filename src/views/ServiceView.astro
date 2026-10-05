@@ -1,0 +1,118 @@
+---
+import { render } from "astro:content";
+import { CheckCircle } from "lucide-react";
+import CtaBlock from "@/components/CtaBlock.astro";
+import WorkCard from "@/components/WorkCard.astro";
+import type { Lang, UiKey } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getWorkBySlug, slugOf, type ServiceEntry } from "@/lib/collections";
+import { breadcrumbJsonLd, serviceJsonLd } from "@/lib/structured-data";
+
+interface Props {
+  entry: ServiceEntry;
+  lang: Lang;
+}
+
+const STEP_KEYS = [
+  ["process.1.title", "process.1.text"],
+  ["process.2.title", "process.2.text"],
+  ["process.3.title", "process.3.text"],
+  ["process.4.title", "process.4.text"],
+] as const satisfies readonly (readonly [UiKey, UiKey])[];
+
+const { entry, lang } = Astro.props;
+const { data } = entry;
+const path = `/services/${slugOf(entry)}/`;
+const { Content } = await render(entry);
+// getWorkBySlug throws for an unknown slug, so a typo in `proof` fails the build.
+const proof = await Promise.all(data.proof.map((slug) => getWorkBySlug(lang, slug)));
+const steps = STEP_KEYS.map(([title, text]) => ({ title: t(lang, title), text: t(lang, text) }));
+const jsonLd = [
+  serviceJsonLd({ name: data.title, description: data.summary, path, lang }),
+  breadcrumbJsonLd([
+    { name: t(lang, "breadcrumb.home"), path: localizePath("/", lang) },
+    { name: data.title, path: localizePath(path, lang) },
+  ]),
+];
+---
+<BaseLayout lang={lang} path={path} title={`${data.title} | Amadou Niang`} description={data.summary} jsonLd={jsonLd}>
+  <section class="section-container pt-32">
+    <div class="orb orb-cyan" style="width:450px;height:450px;top:0%;left:-12%"></div>
+    <div class="section-inner" style="max-width:56rem">
+      <p class="eyebrow mb-3">{t(lang, "nav.services")} · {data.title}</p>
+      <h1 class="text-4xl sm:text-5xl font-bold gradient-text leading-tight">{data.headline}</h1>
+      <p class="mt-6 text-lg leading-relaxed text-white/80">{data.summary}</p>
+      <a
+        href={localizePath("/contact/", lang)}
+        class="btn-glow mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-white"
+        style="background:rgba(214,201,182,0.15);border:1px solid rgba(214,201,182,0.3)"
+      >
+        {t(lang, "cta.button")}
+      </a>
+      <section aria-labelledby="for-title" class="reveal mt-16 glass-card glow-border rounded-2xl p-8">
+        <h2 id="for-title" class="eyebrow mb-3">{t(lang, "service.for")}</h2>
+        <p class="text-lg text-white/85">{data.audience}</p>
+        <div class="prose prose-case mt-6 max-w-none">
+          <Content />
+        </div>
+      </section>
+      <section id="features" aria-labelledby="features-title" class="mt-16">
+        <h2 id="features-title" class="text-2xl font-semibold text-white/90 mb-6">{t(lang, "service.features")}</h2>
+        <ul class="grid sm:grid-cols-2 gap-4">
+          {data.features.map((feature) => (
+            <li class="reveal glass-card rounded-xl p-5 flex gap-3 text-white/80">
+              <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#d6c9b6]" aria-hidden="true" />
+              <span>{feature}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
+  </section>
+
+  <section id="proof" aria-labelledby="proof-title" class="section-container pt-0">
+    <div class="section-inner">
+      <h2 id="proof-title" class="text-2xl font-semibold text-white/90 mb-8">{t(lang, "service.proof")}</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        {proof.map((work) => <WorkCard entry={work} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="process-title" class="section-container pt-0">
+    <div class="section-inner">
+      <h2 id="process-title" class="text-2xl font-semibold text-white/90 mb-8">{t(lang, "service.process")}</h2>
+      <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {steps.map((step, index) => (
+          <li class="reveal glass-card rounded-2xl p-6">
+            <span class="text-3xl font-bold gradient-text" style="font-family:'Space Grotesk',sans-serif">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 class="mt-3 font-semibold text-white/90">{step.title}</h3>
+            <p class="mt-2 text-sm text-white/70">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="faq" aria-labelledby="faq-title" class="section-container pt-0">
+    <div class="section-inner" style="max-width:56rem">
+      <h2 id="faq-title" class="text-2xl font-semibold text-white/90 mb-8">{t(lang, "service.faq")}</h2>
+      <div class="space-y-4">
+        {data.faq.map((item) => (
+          <details class="reveal group glass-card rounded-2xl p-6">
+            <summary class="cursor-pointer list-none flex justify-between gap-4 font-semibold text-white/90">
+              {item.q}
+              <span aria-hidden="true" class="text-[#d6c9b6] transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p class="mt-4 leading-relaxed text-white/75">{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBlock lang={lang} />
+</BaseLayout>

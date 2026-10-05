@@ -1,0 +1,57 @@
+---
+import { Image } from "astro:assets";
+import { ArrowRight } from "lucide-react";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import { slugOf, type WorkEntry } from "@/lib/collections";
+
+interface Props {
+  entry: WorkEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { data } = entry;
+const href = localizePath(`/work/${slugOf(entry)}/`, lang);
+const lead = data.facts[0];
+const meta = data.named ? data.period : `${t(lang, "work.clientNote")} · ${data.period}`;
+---
+<article class="reveal group glass-card glow-border rounded-2xl overflow-hidden flex flex-col">
+  <div class="aspect-video relative overflow-hidden" aria-hidden="true">
+    {data.image ? (
+      <Image
+        src={data.image}
+        alt=""
+        widths={[400, 800, 1200]}
+        sizes="(min-width: 1024px) 384px, (min-width: 640px) 50vw, 100vw"
+        class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+      />
+    ) : (
+      <div
+        class="w-full h-full flex flex-col items-center justify-center text-center px-6"
+        style="background: radial-gradient(circle at 30% 20%, rgba(214,201,182,0.18), transparent 60%)"
+      >
+        <span class="text-5xl font-bold gradient-text" style="font-family:'Space Grotesk',sans-serif">{lead?.value}</span>
+        <span class="mt-2 text-sm text-white/75 max-w-[16rem]">{lead?.label}</span>
+      </div>
+    )}
+  </div>
+  <div class="p-6 flex flex-col gap-3 flex-1">
+    <p class="eyebrow">{meta}</p>
+    <h3 class="font-semibold text-lg text-white/90 leading-snug">
+      <a href={href} class="hover:text-white">{data.title}</a>
+    </h3>
+    <p class="text-sm leading-relaxed text-white/70">{data.summary}</p>
+    <ul class="flex flex-wrap gap-1.5 pt-1">
+      {data.stack.slice(0, 4).map((item) => <li class="tag-pill">{item}</li>)}
+    </ul>
+    <a
+      href={href}
+      aria-label={`${t(lang, "work.readCase")}: ${data.title}`}
+      class="mt-auto pt-3 inline-flex items-center gap-1.5 text-sm font-medium text-[#d6c9b6] hover:text-white"
+    >
+      {t(lang, "work.readCase")}
+      <ArrowRight className="w-4 h-4" aria-hidden="true" />
+    </a>
+  </div>
+</article>

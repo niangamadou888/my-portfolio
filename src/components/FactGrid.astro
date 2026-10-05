@@ -1,0 +1,34 @@
+---
+import type { Lang } from "@/i18n/ui";
+import { t } from "@/i18n/utils";
+
+interface Fact {
+  value: string;
+  label: string;
+  source: string;
+}
+
+interface Props {
+  facts: readonly Fact[];
+  lang: Lang;
+}
+
+const { facts, lang } = Astro.props;
+---
+<ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+  {facts.map((fact) => (
+    <li class="reveal glass-card rounded-2xl p-6 flex flex-col">
+      <span class="text-4xl font-bold gradient-text" style="font-family:'Space Grotesk',sans-serif">{fact.value}</span>
+      <span class="mt-2 text-sm text-white/75 flex-1">{fact.label}</span>
+      <span class="mt-4 text-xs text-white/60">
+        {fact.source.startsWith("https://") ? (
+          <a href={fact.source} target="_blank" rel="noopener noreferrer" class="underline decoration-dotted underline-offset-2 hover:text-white">
+            {t(lang, "case.source")}
+          </a>
+        ) : (
+          t(lang, "case.fromCode")
+        )}
+      </span>
+    </li>
+  ))}
+</ul>

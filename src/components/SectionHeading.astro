@@ -1,0 +1,18 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  id?: string;
+  align?: "left" | "center";
+  tone?: "default" | "pink";
+  as?: "h1" | "h2";
+}
+
+const { eyebrow, title, id, align = "left", tone = "default", as: Tag = "h2" } = Astro.props;
+---
+<div class:list={["reveal mb-14", { "text-center": align === "center" }]}>
+  <p class="eyebrow mb-3">{eyebrow}</p>
+  <Tag id={id} class:list={["text-4xl sm:text-5xl font-bold leading-tight", tone === "pink" ? "gradient-text-pink" : "gradient-text"]}>
+    {title}
+  </Tag>
+</div>

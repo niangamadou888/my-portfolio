@@ -1,0 +1,117 @@
+<!doctype html>
+<!-- Social sharing card (1200×630). Rendered to public/og-image.png by: node scripts/make-og-image.mjs -->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Social card</title>
+    <style>
+      @font-face {
+        font-family: "Space Grotesk";
+        font-style: normal;
+        font-weight: 300 700;
+        src: url("../public/fonts/space-grotesk-latin-wght-normal.woff2") format("woff2-variations");
+      }
+      @font-face {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 400;
+        src: url("../public/fonts/inter-latin-400-normal.woff2") format("woff2");
+      }
+      @font-face {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 500;
+        src: url("../public/fonts/inter-latin-500-normal.woff2") format("woff2");
+      }
+
+      :root {
+        --slate: #323c48;
+        --sand: #d6c9b6;
+        --sand-deep: #b8a898;
+      }
+
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+      }
+
+      body {
+        position: relative;
+        overflow: hidden;
+        background: var(--slate);
+        color: var(--sand);
+        font-family: "Inter", sans-serif;
+      }
+
+      .glow {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 82% 22%, rgba(214, 201, 182, 0.24), transparent 52%),
+          radial-gradient(circle at 8% 108%, rgba(184, 168, 152, 0.16), transparent 46%);
+      }
+
+      .card {
+        position: relative;
+        height: 100%;
+        padding: 64px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .sand-gradient {
+        background-image: linear-gradient(135deg, var(--sand), var(--sand-deep));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .mark {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 36px;
+        letter-spacing: 0.2em;
+      }
+
+      .name {
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 700;
+        font-size: 88px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+      }
+
+      .role {
+        margin-top: 28px;
+        font-size: 34px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .domain {
+        font-size: 28px;
+        font-weight: 500;
+        color: var(--sand);
+        letter-spacing: 0.02em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glow"></div>
+    <main class="card">
+      <div class="mark sand-gradient">ABN</div>
+      <div>
+        <h1 class="name sand-gradient">Amadou Boubacar Niang</h1>
+        <p class="role">Full-stack developer · SaaS, multilingual sites &amp; AI tools</p>
+      </div>
+      <p class="domain">amadouniang.dev</p>
+    </main>
+  </body>
+</html>

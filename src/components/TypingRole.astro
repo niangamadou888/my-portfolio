@@ -1,0 +1,42 @@
+---
+interface Props {
+  roles: readonly string[];
+}
+
+const { roles } = Astro.props;
+---
+<span class="gradient-text font-bold" data-typing data-roles={JSON.stringify(roles)}>
+  <span class="sr-only">{roles.join(", ")}</span>
+  <span aria-hidden="true"><span data-typing-text>{roles[0]}</span><span class="typing-caret"></span></span>
+</span>
+
+<script>
+  const TYPE_MS = 70;
+  const DELETE_MS = 40;
+  const HOLD_MS = 1400;
+
+  const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function cycle(output: Element, roles: readonly string[]): Promise<void> {
+    for (let index = 0; ; index = (index + 1) % roles.length) {
+      const current = roles[index] ?? "";
+      const next = roles[(index + 1) % roles.length] ?? "";
+      await sleep(HOLD_MS);
+      for (let length = current.length; length >= 0; length -= 1) {
+        output.textContent = current.slice(0, length);
+        await sleep(DELETE_MS);
+      }
+      for (let length = 1; length <= next.length; length += 1) {
+        output.textContent = next.slice(0, length);
+        await sleep(TYPE_MS);
+      }
+    }
+  }
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  for (const element of document.querySelectorAll<HTMLElement>("[data-typing]")) {
+    const output = element.querySelector("[data-typing-text]");
+    const roles = JSON.parse(element.dataset.roles ?? "[]") as string[];
+    if (output && roles.length > 1 && !reduceMotion) void cycle(output, roles);
+  }
+</script>

@@ -1,0 +1,59 @@
+---
+import CtaBlock from "@/components/CtaBlock.astro";
+import Hero from "@/components/Hero.astro";
+import ProofStrip from "@/components/ProofStrip.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ServiceCard from "@/components/ServiceCard.astro";
+import WorkCard from "@/components/WorkCard.astro";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getServices, getWork } from "@/lib/collections";
+import { personJsonLd, websiteJsonLd } from "@/lib/structured-data";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const featured = (await getWork(lang))
+  .filter((entry) => entry.data.featured !== undefined)
+  .sort((a, b) => (a.data.featured ?? 0) - (b.data.featured ?? 0));
+const services = await getServices(lang);
+---
+<BaseLayout lang={lang} path="/" title={t(lang, "home.title")} description={t(lang, "home.description")} jsonLd={[personJsonLd(), websiteJsonLd(lang)]}>
+  <Hero lang={lang} />
+  <ProofStrip lang={lang} />
+  <section id="featured-work" class="section-container">
+    <div class="section-inner">
+      <SectionHeading eyebrow={t(lang, "home.workEyebrow")} title={t(lang, "home.workTitle")} />
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        {featured.map((entry) => <WorkCard entry={entry} lang={lang} />)}
+      </div>
+      <a href={localizePath("/work/", lang)} class="reveal mt-10 inline-flex items-center gap-2 text-sm font-medium text-[#d6c9b6] hover:text-white">
+        {t(lang, "home.workAll")} →
+      </a>
+    </div>
+  </section>
+  <section id="services" class="section-container">
+    <div class="orb orb-cyan" style="width:400px;height:400px;top:10%;left:-10%"></div>
+    <div class="section-inner">
+      <SectionHeading eyebrow={t(lang, "home.servicesEyebrow")} title={t(lang, "home.servicesTitle")} />
+      <div class="grid sm:grid-cols-2 gap-6">
+        {services.map((entry) => <ServiceCard entry={entry} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+  <section id="about" class="section-container">
+    <div class="section-inner" style="max-width:56rem">
+      <SectionHeading eyebrow={t(lang, "home.aboutEyebrow")} title={t(lang, "home.aboutTitle")} />
+      <div class="reveal glass-card glow-border rounded-2xl p-8">
+        <p class="text-lg leading-relaxed text-white/80">{t(lang, "home.aboutText")}</p>
+        <a href={localizePath("/about/", lang)} class="mt-6 inline-flex items-center gap-2 text-sm font-medium text-[#d6c9b6] hover:text-white">
+          {t(lang, "home.aboutLink")} →
+        </a>
+      </div>
+    </div>
+  </section>
+  <CtaBlock lang={lang} />
+</BaseLayout>

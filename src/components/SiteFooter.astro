@@ -1,0 +1,54 @@
+---
+import { Github, Linkedin, Mail } from "lucide-react";
+import type { Lang } from "@/i18n/ui";
+import { t } from "@/i18n/utils";
+import { navItems } from "@/lib/nav";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL, PERSON_NAME } from "@/lib/site";
+
+interface Props {
+  lang: Lang;
+  path: string;
+}
+
+const { lang, path } = Astro.props;
+const year = new Date().getFullYear();
+const socials = [
+  { Icon: Github, href: GITHUB_URL, label: "GitHub", external: true },
+  { Icon: Linkedin, href: LINKEDIN_URL, label: "LinkedIn", external: true },
+  { Icon: Mail, href: `mailto:${EMAIL}`, label: "Email", external: false },
+];
+---
+<footer class="relative z-[2] py-10 px-4 overflow-hidden">
+  <div
+    class="absolute top-0 inset-x-0 h-px"
+    style="background: linear-gradient(90deg, transparent, rgba(214,201,182,0.3), rgba(184,168,152,0.2), transparent)"
+  ></div>
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+    <div class="flex flex-col items-center md:items-start gap-1">
+      <span class="logo-text text-lg font-bold tracking-widest">ABN</span>
+      <p class="text-sm text-white/60">© {year} {PERSON_NAME}. {t(lang, "footer.rights")}</p>
+    </div>
+    <nav aria-label={t(lang, "footer.nav")}>
+      <ul class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm">
+        {navItems(lang, path).map((item) => (
+          <li><a href={item.href} class="text-white/70 hover:text-white transition-colors">{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <ul class="flex items-center gap-3">
+      {socials.map(({ Icon, href, label, external }) => (
+        <li>
+          <a
+            href={href}
+            aria-label={label}
+            class="social-btn"
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+          >
+            <Icon className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>
