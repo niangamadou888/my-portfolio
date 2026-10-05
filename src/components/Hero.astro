@@ -1,0 +1,80 @@
+---
+import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import TypingRole from "@/components/TypingRole.astro";
+import { ROLES } from "@/data/hero";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import { EMAIL, GITHUB_URL, LINKEDIN_URL } from "@/lib/site";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const socials = [
+  { Icon: Github, href: GITHUB_URL, label: "GitHub", external: true },
+  { Icon: Linkedin, href: LINKEDIN_URL, label: "LinkedIn", external: true },
+  { Icon: Mail, href: `mailto:${EMAIL}`, label: "Email", external: false },
+];
+---
+<section id="home" class="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden px-4">
+  <div class="orb orb-purple" style="width:600px;height:600px;top:-10%;left:-15%"></div>
+  <div class="orb orb-cyan" style="width:400px;height:400px;bottom:-5%;right:-10%"></div>
+  <div class="orb orb-pink" style="width:300px;height:300px;top:30%;right:10%;opacity:0.07"></div>
+  <div class="relative z-10 max-w-4xl mx-auto space-y-8 pt-20">
+    <div class="flex justify-center" style="animation: fadeInUp 0.6s ease 0.2s both">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium text-[#d6c9b6] bg-[rgba(214,201,182,0.08)] border border-[rgba(214,201,182,0.2)]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#d6c9b6] animate-pulse-glow" aria-hidden="true"></span>
+        {t(lang, "hero.badge")}
+      </span>
+    </div>
+    <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold leading-tight tracking-tight">
+      <span class="text-white">Amadou</span>{" "}<br /><span class="gradient-text">Boubacar Niang</span>
+    </h1>
+    <p class="text-2xl sm:text-3xl font-medium min-h-[2.5rem]" style="animation: fadeIn 0.6s ease 0.7s both">
+      <TypingRole roles={ROLES[lang]} />
+    </p>
+    <p class="text-base sm:text-lg max-w-xl mx-auto leading-relaxed text-white/75" style="animation: fadeInUp 0.6s ease 0.9s both">
+      {t(lang, "hero.pitch")}
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" style="animation: fadeInUp 0.6s ease 1.1s both">
+      <a
+        href={localizePath("/contact/", lang)}
+        class="btn-glow inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-white"
+        style="background:rgba(214,201,182,0.15);border:1px solid rgba(214,201,182,0.35);box-shadow:0 0 20px rgba(214,201,182,0.1)"
+      >
+        {t(lang, "hero.ctaPrimary")}
+      </a>
+      <a
+        href={localizePath("/work/", lang)}
+        class="btn-glow inline-flex items-center gap-2 px-7 py-3 rounded-full text-sm font-semibold text-[#d6c9b6]"
+        style="background:rgba(50,60,72,0.6);border:1px solid rgba(214,201,182,0.2)"
+      >
+        {t(lang, "hero.ctaSecondary")}
+      </a>
+    </div>
+    <ul class="flex gap-5 justify-center pt-2" style="animation: fadeInUp 0.6s ease 1.3s both">
+      {socials.map(({ Icon, href, label, external }) => (
+        <li>
+          <a
+            href={href}
+            aria-label={label}
+            class="social-btn"
+            target={external ? "_blank" : undefined}
+            rel={external ? "noopener noreferrer" : undefined}
+          >
+            <Icon className="w-4 h-4" aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <a
+    href="#proof"
+    class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60 hover:text-white/85"
+    style="animation: fadeIn 0.6s ease 2s both"
+  >
+    <span class="text-xs tracking-widest uppercase">{t(lang, "hero.scroll")}</span>
+    <span style="animation: bounceMini 1.5s ease-in-out infinite"><ArrowDown className="w-4 h-4" aria-hidden="true" /></span>
+  </a>
+</section>

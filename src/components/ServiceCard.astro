@@ -1,0 +1,27 @@
+---
+import { ArrowRight } from "lucide-react";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import { slugOf, type ServiceEntry } from "@/lib/collections";
+
+interface Props {
+  entry: ServiceEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const href = localizePath(`/services/${slugOf(entry)}/`, lang);
+---
+<article class="reveal glass-card glow-border rounded-2xl p-7 flex flex-col gap-3">
+  <h3 class="text-lg font-semibold text-white/90 leading-snug">
+    <a href={href} class="hover:text-white">{entry.data.title}</a>
+  </h3>
+  <p class="text-sm leading-relaxed text-white/70 flex-1">{entry.data.summary}</p>
+  <a
+    href={href}
+    class="inline-flex items-center gap-1.5 text-sm font-medium text-[#d6c9b6] hover:text-white"
+  >
+    {t(lang, "service.learnMore")}<span class="sr-only">: {entry.data.title}</span>
+    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+  </a>
+</article>

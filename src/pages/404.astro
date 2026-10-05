@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { t } from "@/i18n/utils";
+---
+<BaseLayout lang="en" path="/404/" title="Page not found | Amadou Niang" description={t("en", "notFound.text")} noindex>
+  <section class="section-container min-h-[70vh] flex items-center pt-32">
+    <div class="section-inner text-center">
+      <h1 class="text-6xl sm:text-7xl font-bold gradient-text mb-6">404</h1>
+      <p class="text-xl text-white/85">{t("en", "notFound.title")} · <span lang="fr">{t("fr", "notFound.title")}</span></p>
+      <p class="mt-3 text-white/65">{t("en", "notFound.text")}</p>
+      <div class="mt-10 flex flex-wrap justify-center gap-4">
+        <a href="/" class="btn-glow inline-flex px-6 py-3 rounded-full text-sm font-semibold text-white" style="background:rgba(214,201,182,0.15);border:1px solid rgba(214,201,182,0.3)">
+          {t("en", "notFound.home")}
+        </a>
+        <a href="/fr/" lang="fr" class="inline-flex px-6 py-3 rounded-full text-sm font-semibold text-[#d6c9b6] border border-[rgba(214,201,182,0.25)]">
+          {t("fr", "notFound.home")}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+import { Mail } from "lucide-react";
+import ContactForm, { type ContactLabels } from "@/components/islands/ContactForm";
+import SectionHeading from "@/components/SectionHeading.astro";
+import type { Lang } from "@/i18n/ui";
+import { t } from "@/i18n/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { EMAIL } from "@/lib/site";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const labels: ContactLabels = {
+  name: t(lang, "contact.name"),
+  namePlaceholder: t(lang, "contact.namePlaceholder"),
+  email: t(lang, "contact.email"),
+  emailPlaceholder: t(lang, "contact.emailPlaceholder"),
+  subject: t(lang, "contact.subject"),
+  subjectPlaceholder: t(lang, "contact.subjectPlaceholder"),
+  message: t(lang, "contact.message"),
+  messagePlaceholder: t(lang, "contact.messagePlaceholder"),
+  send: t(lang, "contact.send"),
+  sending: t(lang, "contact.sending"),
+  successTitle: t(lang, "contact.successTitle"),
+  successText: t(lang, "contact.successText"),
+  errors: {
+    name: t(lang, "contact.errorName"),
+    email: t(lang, "contact.errorEmail"),
+    subject: t(lang, "contact.errorSubject"),
+    message: t(lang, "contact.errorMessage"),
+  },
+  tooMany: t(lang, "contact.errorTooMany"),
+  failed: t(lang, "contact.errorFailed"),
+  orEmail: t(lang, "contact.orEmail"),
+};
+const steps = [t(lang, "contact.next1"), t(lang, "contact.next2"), t(lang, "contact.next3")];
+---
+<BaseLayout lang={lang} path="/contact/" title={t(lang, "contact.metaTitle")} description={t(lang, "contact.description")}>
+  <section class="section-container pt-32">
+    <div class="orb orb-purple" style="width:500px;height:500px;top:-5%;left:-10%;opacity:0.1"></div>
+    <div class="orb orb-pink" style="width:350px;height:350px;bottom:0%;right:-8%"></div>
+    <div class="section-inner" style="max-width:56rem">
+      <SectionHeading as="h1" eyebrow={t(lang, "nav.contact")} title={t(lang, "contact.title")} align="center" tone="pink" />
+      <p class="reveal -mt-8 mb-12 text-center text-white/75 max-w-2xl mx-auto">{t(lang, "contact.intro")}</p>
+      <div class="reveal glass-card glow-border rounded-3xl p-8 md:p-12 relative overflow-hidden">
+        <ContactForm client:visible labels={labels} email={EMAIL} />
+      </div>
+      <div class="reveal mt-12 grid md:grid-cols-[1fr_auto] gap-8 items-start">
+        <div>
+          <h2 class="text-xl font-semibold text-white/90 mb-4">{t(lang, "contact.nextTitle")}</h2>
+          <ol class="space-y-3">
+            {steps.map((step, index) => (
+              <li class="flex gap-3 text-white/75">
+                <span class="font-semibold text-[#d6c9b6]">{index + 1}.</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+        <a href={`mailto:${EMAIL}`} class="inline-flex items-center gap-2 text-[#d6c9b6] hover:text-white transition-colors">
+          <Mail className="w-4 h-4" aria-hidden="true" />
+          {EMAIL}
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

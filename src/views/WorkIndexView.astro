@@ -1,0 +1,40 @@
+---
+import CtaBlock from "@/components/CtaBlock.astro";
+import ProjectCard from "@/components/ProjectCard.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import WorkCard from "@/components/WorkCard.astro";
+import { MORE_PROJECTS } from "@/data/more-projects";
+import type { Lang } from "@/i18n/ui";
+import { t } from "@/i18n/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getWork } from "@/lib/collections";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const work = await getWork(lang);
+---
+<BaseLayout lang={lang} path="/work/" title={t(lang, "work.metaTitle")} description={t(lang, "work.description")}>
+  <section class="section-container pt-32">
+    <div class="orb orb-purple" style="width:400px;height:400px;top:5%;right:-5%"></div>
+    <div class="section-inner">
+      <SectionHeading as="h1" eyebrow={t(lang, "nav.work")} title={t(lang, "work.title")} />
+      <p class="reveal -mt-8 mb-16 max-w-2xl text-lg text-white/75">{t(lang, "work.intro")}</p>
+      <section id="case-studies" aria-labelledby="case-studies-title">
+        <h2 id="case-studies-title" class="text-2xl font-semibold text-white/90 mb-8">{t(lang, "work.caseStudies")}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          {work.map((entry) => <WorkCard entry={entry} lang={lang} />)}
+        </div>
+      </section>
+      <section id="more-projects" aria-labelledby="more-projects-title" class="mt-24">
+        <h2 id="more-projects-title" class="text-2xl font-semibold text-white/90 mb-8">{t(lang, "work.more")}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+          {MORE_PROJECTS.map((project) => <ProjectCard project={project} lang={lang} />)}
+        </div>
+      </section>
+    </div>
+  </section>
+  <CtaBlock lang={lang} />
+</BaseLayout>

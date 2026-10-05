@@ -1,5 +1,5 @@
 {
-  // Cloudflare Workers Builds runs `npx wrangler deploy` after the Vite build.
+  // Cloudflare Workers Builds runs `npx wrangler deploy` after `astro build`.
   // Built files in `dist` are served directly; only requests with no matching
   // file (today just POST /api/contact) reach the Worker in worker/index.ts.
   "name": "my-portfolio",
@@ -7,7 +7,9 @@
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": "./dist",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    // Page navigations to unknown paths get dist/404.html with a real 404 status. Other unmatched requests (e.g. POST /api/contact) reach the Worker in worker/index.ts.
+    "not_found_handling": "404-page"
   },
   // Per-IP limit on the contact form. Cloudflare only allows 10 or 60 s periods.
   "ratelimits": [

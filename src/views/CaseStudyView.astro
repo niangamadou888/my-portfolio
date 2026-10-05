@@ -1,0 +1,121 @@
+---
+import { getImage, Image } from "astro:assets";
+import { render } from "astro:content";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import CtaBlock from "@/components/CtaBlock.astro";
+import FactGrid from "@/components/FactGrid.astro";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getServices, slugOf, type WorkEntry } from "@/lib/collections";
+import { breadcrumbJsonLd, caseStudyJsonLd } from "@/lib/structured-data";
+
+interface Props {
+  entry: WorkEntry;
+  lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { data } = entry;
+const path = `/work/${slugOf(entry)}/`;
+const { Content } = await render(entry);
+const ogImage = data.image ? (await getImage({ src: data.image, width: 1200, format: "jpg" })).src : undefined;
+const related = data.service ? (await getServices(lang)).find((service) => slugOf(service) === data.service) : undefined;
+if (data.service && !related) {
+  throw new Error(`Case study ${entry.id} links to unknown service "${data.service}"`);
+}
+const crumbs = [
+  { name: t(lang, "breadcrumb.home"), path: localizePath("/", lang) },
+  { name: t(lang, "work.title"), path: localizePath("/work/", lang) },
+  { name: data.title, path: localizePath(path, lang) },
+];
+const jsonLd = [
+  caseStudyJsonLd({ name: data.title, description: data.summary, path, lang, image: ogImage }),
+  breadcrumbJsonLd(crumbs),
+];
+const meta = data.named ? data.period : `${t(lang, "work.clientNote")} · ${data.period}`;
+---
+<BaseLayout lang={lang} path={path} title={`${data.title} | Amadou Niang`} description={data.summary} image={ogImage} type="article" jsonLd={jsonLd}>
+  <article class="section-container pt-32">
+    <div class="orb orb-purple" style="width:500px;height:500px;top:-5%;left:-10%"></div>
+    <div class="section-inner" style="max-width:56rem">
+      <nav aria-label="Breadcrumb" class="mb-8 text-sm text-white/65">
+        <ol class="flex flex-wrap items-center gap-2">
+          {crumbs.map((crumb, index) => (
+            <li class="flex items-center gap-2">
+              {index < crumbs.length - 1 ? (
+                <a href={crumb.path} class="hover:text-white">{crumb.name}</a>
+              ) : (
+                <span aria-current="page" class="text-white/85">{crumb.name}</span>
+              )}
+              {index < crumbs.length - 1 && <span aria-hidden="true">/</span>}
+            </li>
+          ))}
+        </ol>
+      </nav>
+      <p class="eyebrow mb-3">{meta}</p>
+      <h1 class="text-4xl sm:text-5xl font-bold gradient-text leading-tight">{data.title}</h1>
+      <p class="mt-6 text-lg leading-relaxed text-white/80">{data.summary}</p>
+      <dl class="mt-8 grid sm:grid-cols-2 gap-4 text-sm">
+        <div class="glass-card rounded-xl p-4">
+          <dt class="text-white/60">{t(lang, "case.role")}</dt>
+          <dd class="mt-1 font-medium text-white/90">{data.role}</dd>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <dt class="text-white/60">{t(lang, "case.period")}</dt>
+          <dd class="mt-1 font-medium text-white/90">{data.period}</dd>
+        </div>
+      </dl>
+      {data.named && data.liveUrl && (
+        <a
+          href={data.liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-glow mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold text-white"
+          style="background:rgba(214,201,182,0.15);border:1px solid rgba(214,201,182,0.3)"
+        >
+          {t(lang, "case.visit")}
+          <ExternalLink className="w-4 h-4" aria-hidden="true" />
+        </a>
+      )}
+      {data.image && (
+        <Image
+          src={data.image}
+          alt={data.imageAlt ?? ""}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 896px) 896px, 100vw"
+          loading="eager"
+          class="mt-12 w-full rounded-2xl border border-white/10"
+        />
+      )}
+      <section id="results" aria-labelledby="results-title" class="mt-16">
+        <h2 id="results-title" class="text-2xl font-semibold text-white/90">{t(lang, "case.results")}</h2>
+        <p class="mt-2 mb-6 text-sm text-white/60">{t(lang, "case.resultsNote")}</p>
+        <FactGrid facts={data.facts} lang={lang} />
+      </section>
+      <div class="prose prose-case mt-16 max-w-none">
+        <Content />
+      </div>
+      <section aria-labelledby="stack-title" class="mt-14">
+        <h2 id="stack-title" class="text-2xl font-semibold text-white/90 mb-4">{t(lang, "case.stack")}</h2>
+        <ul class="flex flex-wrap gap-2">
+          {data.stack.map((item) => <li class="tag-pill">{item}</li>)}
+        </ul>
+      </section>
+      {related && (
+        <aside class="mt-14 glass-card glow-border rounded-2xl p-6">
+          <p class="eyebrow mb-2">{t(lang, "case.related")}</p>
+          <a href={localizePath(`/services/${slugOf(related)}/`, lang)} class="text-lg font-semibold text-white/90 hover:text-white">
+            {related.data.title}
+          </a>
+          <p class="mt-2 text-sm text-white/70">{related.data.summary}</p>
+        </aside>
+      )}
+      <a href={localizePath("/work/", lang)} class="mt-10 inline-flex items-center gap-2 text-sm font-medium text-[#d6c9b6] hover:text-white">
+        <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+        {t(lang, "case.back")}
+      </a>
+    </div>
+  </article>
+  <CtaBlock lang={lang} />
+</BaseLayout>

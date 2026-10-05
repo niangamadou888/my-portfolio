@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import { servicePaths, type ServiceEntry } from "@/lib/collections";
+import ServiceView from "@/views/ServiceView.astro";
+
+export const getStaticPaths = (() => servicePaths("fr")) satisfies GetStaticPaths;
+
+interface Props {
+  entry: ServiceEntry;
+}
+
+const { entry } = Astro.props;
+---
+<ServiceView lang="fr" entry={entry} />

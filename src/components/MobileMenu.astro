@@ -1,0 +1,110 @@
+---
+import { Menu, X } from "lucide-react";
+import type { Lang } from "@/i18n/ui";
+import { otherLang, t } from "@/i18n/utils";
+import type { NavItem } from "@/lib/nav";
+
+interface Props {
+  lang: Lang;
+  items: NavItem[];
+  /** Omitted on pages that have no twin in the other language (404). */
+  switchHref?: string;
+}
+
+const { lang, items, switchHref } = Astro.props;
+const switchLang = otherLang(lang);
+---
+<div class="md:hidden">
+  {switchHref && (
+    <a
+      href={switchHref}
+      hreflang={switchLang}
+      aria-label={t(lang, "lang.switchLabel")}
+      class="fixed top-5 right-[4.25rem] z-50 flex h-10 items-center rounded-full border border-white/10 bg-white/5 px-3 text-xs font-semibold tracking-widest text-white/80"
+    >
+      {t(lang, "lang.switchShort")}
+    </a>
+  )}
+  <button
+    type="button"
+    data-menu-toggle
+    aria-controls="mobile-nav"
+    aria-expanded="false"
+    aria-label={t(lang, "nav.menuOpen")}
+    data-label-open={t(lang, "nav.menuOpen")}
+    data-label-close={t(lang, "nav.menuClose")}
+    class="fixed top-5 right-5 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5"
+  >
+    <Menu className="menu-icon-open h-5 w-5 text-white" aria-hidden="true" />
+    <X className="menu-icon-close h-5 w-5 text-white" aria-hidden="true" />
+  </button>
+  <div id="mobile-nav" class="mobile-nav" hidden>
+    <nav aria-label={t(lang, "nav.primary")}>
+      <ul class="flex flex-col items-center gap-8">
+        {items.map((item, index) => (
+          <li style={`animation: fadeInUp 0.4s ease ${0.1 + index * 0.07}s both`}>
+            <a
+              href={item.href}
+              aria-current={item.active ? (item.exact ? "page" : "true") : undefined}
+              class:list={["text-2xl font-semibold tracking-wide", item.active ? "gradient-text" : "text-white/70 hover:text-white"]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const panel = document.getElementById("mobile-nav");
+  const desktop = window.matchMedia("(min-width: 768px)");
+
+  if (button && panel) {
+    const links = (): HTMLAnchorElement[] => [...panel.querySelectorAll<HTMLAnchorElement>("a[href]")];
+    const isOpen = (): boolean => button.getAttribute("aria-expanded") === "true";
+
+    const setOpen = (open: boolean): void => {
+      button.setAttribute("aria-expanded", String(open));
+      button.setAttribute("aria-label", (open ? button.dataset.labelClose : button.dataset.labelOpen) ?? "");
+      panel.hidden = !open;
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    const openMenu = (): void => {
+      setOpen(true);
+      links()[0]?.focus();
+    };
+
+    const closeMenu = (returnFocus: boolean): void => {
+      setOpen(false);
+      if (returnFocus) button.focus();
+    };
+
+    // While open, Tab and Shift+Tab cycle through the toggle and the menu links only.
+    const cycleFocus = (event: KeyboardEvent): void => {
+      const stops: HTMLElement[] = [button, ...links()];
+      const current = stops.findIndex((element) => element === document.activeElement);
+      const step = event.shiftKey ? -1 : 1;
+      const next = current === -1 ? (event.shiftKey ? stops.length - 1 : 0) : (current + step + stops.length) % stops.length;
+      event.preventDefault();
+      stops[next]?.focus();
+    };
+
+    button.addEventListener("click", () => (isOpen() ? closeMenu(true) : openMenu()));
+    panel.addEventListener("click", (event) => {
+      if (event.target instanceof Element && event.target.closest("a")) closeMenu(false);
+    });
+    document.addEventListener("keydown", (event) => {
+      if (!isOpen()) return;
+      if (event.key === "Escape") closeMenu(true);
+      else if (event.key === "Tab") cycleFocus(event);
+    });
+    // The toggle is hidden from 768px up, so a menu left open there would trap the page.
+    desktop.addEventListener("change", (event) => {
+      if (event.matches && isOpen()) closeMenu(false);
+    });
+  }
+</script>

@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import { workPaths, type WorkEntry } from "@/lib/collections";
+import CaseStudyView from "@/views/CaseStudyView.astro";
+
+export const getStaticPaths = (() => workPaths("en")) satisfies GetStaticPaths;
+
+interface Props {
+  entry: WorkEntry;
+}
+
+const { entry } = Astro.props;
+---
+<CaseStudyView lang="en" entry={entry} />

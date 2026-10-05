@@ -1,0 +1,94 @@
+---
+import "@/styles/global.css";
+import NoiseOverlay from "@/components/NoiseOverlay.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import type { Lang } from "@/i18n/ui";
+import { t } from "@/i18n/utils";
+import { buildSeo } from "@/lib/seo";
+import { PERSON_NAME } from "@/lib/site";
+
+interface Props {
+  lang: Lang;
+  /** English-form path of this page, e.g. "/work/prnow/". */
+  path: string;
+  title: string;
+  description: string;
+  image?: string;
+  type?: "website" | "article";
+  jsonLd?: object[];
+  /** For pages with no indexable URL (404): no canonical, no alternates, no language switch. */
+  noindex?: boolean;
+}
+
+const { lang, path, title, description, image, type, jsonLd, noindex = false } = Astro.props;
+const seo = buildSeo({ lang, path, title, description, image, type, jsonLd });
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{seo.title}</title>
+    <meta name="description" content={seo.description} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={seo.canonical} />
+        {seo.alternates.map((alternate) => (
+          <link rel="alternate" hreflang={alternate.hreflang} href={alternate.href} />
+        ))}
+      </>
+    )}
+    <meta name="theme-color" content="#323c48" />
+    <link rel="icon" type="image/jpeg" href="/logo.jpeg" />
+    <link rel="apple-touch-icon" href="/logo.jpeg" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/space-grotesk-latin-wght-normal.woff2" crossorigin />
+    <meta property="og:type" content={seo.ogType} />
+    <meta property="og:site_name" content={PERSON_NAME} />
+    <meta property="og:title" content={seo.title} />
+    <meta property="og:description" content={seo.description} />
+    {!noindex && <meta property="og:url" content={seo.canonical} />}
+    <meta property="og:image" content={seo.ogImage} />
+    <meta property="og:locale" content={seo.ogLocale} />
+    <meta property="og:locale:alternate" content={seo.ogLocaleAlternate} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={seo.title} />
+    <meta name="twitter:description" content={seo.description} />
+    <meta name="twitter:image" content={seo.ogImage} />
+    {seo.jsonLd.map((json) => <script type="application/ld+json" set:html={json} />)}
+    <script is:inline>
+      (function () {
+        if (!("IntersectionObserver" in window)) return;
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        document.documentElement.classList.add("reveal-armed");
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px" }
+        );
+        document.addEventListener("DOMContentLoaded", function () {
+          document.querySelectorAll(".reveal").forEach(function (element) {
+            observer.observe(element);
+          });
+        });
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{t(lang, "skip")}</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <NoiseOverlay />
+    <SiteHeader lang={lang} path={path} hideLangSwitch={noindex} />
+    <main id="main" class="relative z-[2] min-h-screen">
+      <slot />
+    </main>
+    <SiteFooter lang={lang} path={path} />
+  </body>
+</html>

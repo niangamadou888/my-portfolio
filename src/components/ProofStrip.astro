@@ -1,0 +1,28 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import { PROOF } from "@/data/proof";
+import type { Lang } from "@/i18n/ui";
+import { localizePath, t } from "@/i18n/utils";
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+<section id="proof" class="section-container">
+  <div class="section-inner">
+    <SectionHeading eyebrow={t(lang, "home.proofEyebrow")} title={t(lang, "home.proofTitle")} />
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {PROOF.map((item) => (
+        <li class="reveal">
+          <a href={localizePath(item.href, lang)} class="glass-card glow-border rounded-2xl p-6 flex flex-col h-full transition-transform hover:-translate-y-1">
+            <span class="text-4xl font-bold gradient-text" style="font-family:'Space Grotesk',sans-serif">{item.value[lang]}</span>
+            <span class="mt-2 text-sm text-white/75">{item.label[lang]}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 text-xs text-white/60">{t(lang, "home.proofNote")}</p>
+  </div>
+</section>
