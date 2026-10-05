@@ -8,7 +8,10 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck:worker": "tsc -p tsconfig.worker.json",
+    "preview:worker": "npm run build && wrangler dev"
   },
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.10",
@@ -69,7 +72,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
-    "@netlify/functions": "^5.3.0",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
@@ -87,6 +89,8 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vitest": "^3.2.7",
+    "wrangler": "^4.147.0"
   }
 }

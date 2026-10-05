@@ -13,6 +13,10 @@ const escapeHtml = (value: string): string =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
+/** Name and subject sit on one line; control characters could otherwise forge extra lines. */
+// eslint-disable-next-line no-control-regex -- matching control characters is the purpose
+const oneLine = (value: string): string => value.replace(/[\u0000-\u001f\u007f]+/g, " ").trim();
+
 const toParagraphs = (message: string): string =>
   message
     .split(/\n{2,}/)
@@ -20,20 +24,20 @@ const toParagraphs = (message: string): string =>
     .join("");
 
 export const buildSubject = ({ subject, name }: ContactMessage): string =>
-  `[Portfolio] ${subject} — ${name}`;
+  `[Portfolio] ${oneLine(subject)} — ${oneLine(name)}`;
 
 export const buildTextBody = ({ name, email, subject, message }: ContactMessage): string =>
   [
     "New message from the portfolio contact form",
     "",
-    `Name:    ${name}`,
+    `Name:    ${oneLine(name)}`,
     `Email:   ${email}`,
-    `Subject: ${subject}`,
+    `Subject: ${oneLine(subject)}`,
     "",
     "Message:",
     message,
     "",
-    `Reply directly to this email to reach ${name}.`,
+    `Reply directly to this email to reach ${oneLine(name)}.`,
   ].join("\n");
 
 export const buildHtmlBody = (contact: ContactMessage): string => {

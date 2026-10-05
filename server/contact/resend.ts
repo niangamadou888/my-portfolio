@@ -28,9 +28,8 @@ const extractErrorMessage = async (response: Response): Promise<string> => {
 };
 
 /**
- * Sends one email through Resend's REST API. The HTTPS endpoint is used rather
- * than the SMTP relay because a serverless function would otherwise open (and
- * pay for) a fresh TCP + TLS handshake on every cold start.
+ * Sends one email through Resend's REST API. Workers speak HTTPS natively,
+ * so this is one fetch per message instead of an SMTP session.
  */
 export async function sendEmail(apiKey: string, input: SendEmailInput): Promise<string> {
   const timeout = AbortSignal.timeout(REQUEST_TIMEOUT_MS);

@@ -41,3 +41,6 @@ deno.lock
 
 # Wrangler local state (Cloudflare Workers)
 .wrangler/
+
+# Local secrets for `wrangler dev`
+.dev.vars

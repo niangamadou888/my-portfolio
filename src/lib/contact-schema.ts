@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 /**
- * Shared between the Contact form (client) and the Netlify function (server),
+ * Shared between the Contact form (client) and the contact Worker (server),
  * so both sides reject exactly the same payloads. Never trust the client copy:
- * the function re-validates every request against this schema.
+ * the Worker re-validates every request against this schema.
  */
 export const CONTACT_LIMITS = {
   name: { min: 2, max: 100 },
@@ -34,10 +34,11 @@ export const contactSchema = z.object({
     .min(CONTACT_LIMITS.message.min, "Message must be at least 20 characters")
     .max(CONTACT_LIMITS.message.max, "Message must be under 5000 characters"),
   /**
-   * Honeypot. Hidden from real users via CSS, so a non-empty value means a bot
-   * filled the form. Optional and unvalidated here — the server decides.
+   * Honeypot. Hidden from real users via CSS, so a non-blank value means a bot
+   * filled the form. Unbounded on purpose: the Worker checks it before
+   * validation, so no length error can tip a bot off.
    */
-  website: z.string().max(CONTACT_LIMITS.name.max).optional(),
+  website: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;
