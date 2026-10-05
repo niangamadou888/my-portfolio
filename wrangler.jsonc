@@ -1,11 +1,26 @@
 {
   // Cloudflare Workers Builds runs `npx wrangler deploy` after the Vite build.
-  // Without this file wrangler tries to auto-configure the project, which
-  // requires Vite >= 6 and fails on our Vite 5 setup. An explicit assets-only
-  // Worker just uploads the built `dist` folder.
+  // Built files in `dist` are served directly; only requests with no matching
+  // file (today just POST /api/contact) reach the Worker in worker/index.ts.
   "name": "my-portfolio",
+  "main": "worker/index.ts",
   "compatibility_date": "2026-09-01",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+  // Per-IP limit on the contact form. Cloudflare only allows 10 or 60 s periods.
+  "ratelimits": [
+    {
+      "name": "CONTACT_RATE_LIMITER",
+      "namespace_id": "48101",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
+  // Keeps console.error output from the contact handler in Workers Logs.
+  "observability": {
+    "enabled": true
   }
+  // RESEND_API_KEY is a secret: set it in the dashboard (Settings → Variables
+  // and Secrets) or with `npx wrangler secret put RESEND_API_KEY`.
 }

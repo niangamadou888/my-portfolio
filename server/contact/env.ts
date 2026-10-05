@@ -4,6 +4,13 @@ export interface ContactEnv {
   readonly fromEmail: string;
 }
 
+/** The raw bindings a Worker receives; every value is optional until checked. */
+export interface ContactEnvSource {
+  readonly RESEND_API_KEY?: string;
+  readonly CONTACT_TO_EMAIL?: string;
+  readonly CONTACT_FROM_EMAIL?: string;
+}
+
 export class MissingEnvError extends Error {
   constructor(name: string) {
     super(`Missing required environment variable: ${name}`);
@@ -17,10 +24,10 @@ const DEFAULT_TO_EMAIL = "amadouniang2001@gmail.com";
 
 /**
  * Read at request time rather than module scope so a missing key surfaces as a
- * handled 500 on one request instead of crashing the whole function bundle.
+ * handled 500 on one request instead of failing every request to the Worker.
  */
-export function readContactEnv(): ContactEnv {
-  const resendApiKey = process.env.RESEND_API_KEY?.trim();
+export function readContactEnv(source: ContactEnvSource): ContactEnv {
+  const resendApiKey = source.RESEND_API_KEY?.trim();
 
   if (!resendApiKey) {
     throw new MissingEnvError("RESEND_API_KEY");
@@ -28,7 +35,7 @@ export function readContactEnv(): ContactEnv {
 
   return {
     resendApiKey,
-    toEmail: process.env.CONTACT_TO_EMAIL?.trim() || DEFAULT_TO_EMAIL,
-    fromEmail: process.env.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM_EMAIL,
+    toEmail: source.CONTACT_TO_EMAIL?.trim() || DEFAULT_TO_EMAIL,
+    fromEmail: source.CONTACT_FROM_EMAIL?.trim() || DEFAULT_FROM_EMAIL,
   };
 }
