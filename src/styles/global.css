@@ -256,6 +256,7 @@
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
+  .typing-caret { display: none; }
 }
 
 @media print {
