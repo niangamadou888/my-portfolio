@@ -14,7 +14,6 @@ const { roles } = Astro.props;
   const TYPE_MS = 70;
   const DELETE_MS = 40;
   const HOLD_MS = 1400;
-  const SWAP_MS = 3000;
 
   const sleep = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -34,18 +33,11 @@ const { roles } = Astro.props;
     }
   }
 
-  /** Reduced motion: no typing, each role replaces the previous one whole. */
-  async function swap(output: Element, roles: readonly string[]): Promise<void> {
-    for (let index = 1; ; index = (index + 1) % roles.length) {
-      await sleep(SWAP_MS);
-      output.textContent = roles[index] ?? "";
-    }
-  }
-
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Typing runs even with prefers-reduced-motion: letters appear in place and nothing
+  // moves across the screen. The global reduced-motion rule only stops the caret blinking.
   for (const element of document.querySelectorAll<HTMLElement>("[data-typing]")) {
     const output = element.querySelector("[data-typing-text]");
     const roles = JSON.parse(element.dataset.roles ?? "[]") as string[];
-    if (output && roles.length > 1) void (reduceMotion ? swap(output, roles) : cycle(output, roles));
+    if (output && roles.length > 1) void cycle(output, roles);
   }
 </script>
